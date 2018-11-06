@@ -1,0 +1,208 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /hello:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: hello
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /v1/users:
+    x-swagger-router-controller: users
+    get:
+      description: Returns all users
+      operationId: getUsers
+      parameters: []
+      responses:
+        200:
+          description: Success
+    post:
+      description: Create a user
+      operationId: addUser
+      produces:
+      - application/json
+      parameters: 
+      - name: user
+        in: body
+        description: The user to be added
+        required: true
+        schema:
+          $ref: "#/definitions/AddUserResponse"
+      responses:
+        200:
+          description: "Get user success"
+          schema:
+            $ref: "#/definitions/User"
+  /v1/users/{id}:
+    x-swagger-router-controller: users
+    get:
+      description: Return a user by id
+      operationId: getUser
+      produces:
+      - "application/json"
+      parameters:
+      - name: id
+        in: path
+        description: The id of ther user
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/User"
+    put:
+      description: Update a user by id
+      operationId: updateUser
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: "Id of the user being updated"
+        required: true
+        type: string
+      - name: updated_user
+        in: body
+        description: "The updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: User updated
+          schema:
+            $ref: "#/definitions/UpdateUserResponse"
+        400:
+          description: "Yikes! An error!"
+    delete:
+      description: Delete a user by id
+      operationId: delete
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        200:
+          description: "User deleted"
+          schema:
+            $ref: "#/definitions/DeleteUserResponse"
+  /v1/tasks:
+    x-swagger-router-controller: task
+    get:
+      description: return all todos
+      operationId: getTasks
+      produces:
+      - application/json
+      parameters: 
+      - name: user_id
+        in: query
+        description: "User id of the tasks"
+        required: true
+        type: string
+      responses:
+        200:
+          description: Get tasks by user id
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+        description: User id
+      username:
+        type: string
+        description: Username
+      firstname:
+        type: string
+        description: User's first name
+      lastname:
+        type: string
+        description: User's last name
+      age:
+        type: number
+        description: User's age
+  AddUserResponse:
+    type: object
+    description: It returns a created user object
+    properties:
+      data: 
+        $ref: "#/definitions/User"
+      messge:
+        type: string
+  UpdateUserResponse:
+    type: object
+    required:
+    - message
+    - data
+    description: It returns a updated user object
+    properties:
+      data:
+        $ref: "#/definitions/User"
+      message:
+        type: string
+  DeleteUserResponse:
+    required:
+    - message
+    - id
+    description: It returns a delete user id
+    properties:
+      message:
+        type: string
+      id:
+        type: number
+    
+ 
