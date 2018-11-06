@@ -20,6 +20,9 @@
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.9",
+    "passport": "^0.4.0",
+    "passport-github": "^1.1.0",
+    "passport-local": "^1.0.0",
     "swagger-express-mw": "^0.7.0",
     "winston": "^3.1.0"
   },
