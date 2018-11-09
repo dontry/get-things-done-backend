@@ -21,8 +21,8 @@
     // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 
     /* Strict Type-Checking Options */
-    "strict": true /* Enable all strict type-checking options. */,
-    // "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
+    "strict": false /* Enable all strict type-checking options. */,
+    "noImplicitAny": false /* Raise error on expressions and declarations with an implied 'any' type. */,
     // "strictNullChecks": true,              /* Enable strict null checks. */
     // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
     // "strictPropertyInitialization": true,  /* Enable strict checking of property initialization in classes. */
@@ -37,10 +37,10 @@
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
-    // "paths": {
-    // "*": ["node_modules/*", "api/types/*"]
-    // } /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */,
+    "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
+    "paths": {
+      "*": ["node_modules/*", "api/types/*"]
+    } /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */,
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */
@@ -59,6 +59,6 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "api/**/*"
+    "api/**/*.ts"
   ] /*include takes an array of glob patterns of files to include in the compilation. This project is fairly simple and all of our .ts files are under the src folder. For more complex setups, you can include an exclude array of glob patterns that removes specific files from the set defined with include. There is also a files option which takes an array of individual file names which overrides both include and exclude.*/
 }

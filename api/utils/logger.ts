@@ -1,6 +1,10 @@
 import winston from "winston";
 
 const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.colorize({ all: true }),
+    winston.format.simple()
+  ),
   transports: [
     new winston.transports.Console({
       level: process.env.NODE_ENV === "production" ? "error" : "debug"
