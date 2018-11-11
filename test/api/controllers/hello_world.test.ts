@@ -1,12 +1,12 @@
 import request from "supertest";
-import server from "../../../api/server";
+import server from "../../../server";
 
 describe("controllers", () => {
   describe("hello_world", () => {
     describe("GET /hello", () => {
       it("should return a default string", done => {
         request(server)
-          .get("/hello")
+          .get("/v1/hello")
           // .set("Accept", "application/json")
           // .expect("Content-Type", /json/)
           .expect(200)
@@ -19,10 +19,10 @@ describe("controllers", () => {
 
       it("should accept a name parameter", done => {
         request(server)
-          .get("/hello")
+          .get("/v1/hello")
           .query({ name: "Scott" })
-          .set("Accept", "application/json")
-          .expect("Content-Type", /json/)
+          // .set("Accept", "application/json")
+          // .expect("Content-Type", /json/)
           .expect(200)
           .end((err, res) => {
             expect(err).toBeFalsy();

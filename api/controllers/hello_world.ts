@@ -33,12 +33,13 @@ const router = express.Router();
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
-export const getHello = (req, res) => {
+const getHello = (req, res) => {
   logger.debug("hello world request query param:", req.query);
   const name = _.get(req, "query.name", "stranger");
-  const response: string = `Hello, ${name}`;
+  const response: string = `Hello, ${name}!`;
   res.json(response);
 };
-router.get("/");
+
+router.get("/", getHello);
 
 export default router;

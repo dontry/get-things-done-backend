@@ -26,6 +26,7 @@
     "passport-github": "^1.1.0",
     "passport-local": "^1.0.0",
     "swagger-express-mw": "^0.7.0",
+    "typescript-rest-swagger": "^0.0.22",
     "winston": "^3.1.0"
   },
   "devDependencies": {
