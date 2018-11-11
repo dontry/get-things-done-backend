@@ -59,6 +59,7 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "api/**/*.ts"
-  ] /*include takes an array of glob patterns of files to include in the compilation. This project is fairly simple and all of our .ts files are under the src folder. For more complex setups, you can include an exclude array of glob patterns that removes specific files from the set defined with include. There is also a files option which takes an array of individual file names which overrides both include and exclude.*/
+    "./**/*.ts"
+  ] /*include takes an array of glob patterns of files to include in the compilation. This project is fairly simple and all of our .ts files are under the src folder. For more complex setups, you can include an exclude array of glob patterns that removes specific files from the set defined with include. There is also a files option which takes an array of individual file names which overrides both include and exclude.*/,
+  "exclude": ["./**/*.test.ts", "./**/*.spec.ts"]
 }

@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import fs from "fs";
-import logger from "../utils/logger";
+import Logger from "../utils/logger";
 
 if (fs.existsSync(".env")) {
-  logger.debug("Using .env file to supply config environment variables.");
+  Logger.debug("Using .env file to supply config environment variables.");
   dotenv.config({ path: ".env" });
 }

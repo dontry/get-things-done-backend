@@ -1,5 +1,5 @@
 import _ from "lodash";
-import logger from "../utils/logger";
+import logger from "../../utils/logger";
 /*
  'use strict' is not required but helpful for turning syntactical errors into true errors in the program flow
  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
@@ -11,7 +11,9 @@ import logger from "../utils/logger";
 
   It is a good idea to list the modules that your application depends on in the package.json in the project root
  */
+import express from "express";
 import util from "util";
+const router = express.Router();
 
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
@@ -34,6 +36,9 @@ import util from "util";
 export const getHello = (req, res) => {
   logger.debug("hello world request query param:", req.query);
   const name = _.get(req, "query.name", "stranger");
-  const response: string = util.format("Hello, %s!", name);
+  const response: string = `Hello, ${name}`;
   res.json(response);
 };
+router.get("/");
+
+export default router;
