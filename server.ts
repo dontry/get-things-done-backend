@@ -10,7 +10,9 @@ dotenv.config({ path: ".env" });
 const port = process.env.PORT || 10010;
 
 const app = createExpressServer({
-  controllers: [HelloWorldController]
+  controllers: [HelloWorldController],
+  cors: true,
+  routePrefix: "/v1"
 });
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));

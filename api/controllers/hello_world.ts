@@ -17,7 +17,7 @@ const router = express.Router();
 
 @JsonController()
 class HelloWorldController {
-  @Get("/v1/hello")
+  @Get("/hello")
   public getHello(@QueryParam("name") name: string): string {
     logger.debug("User's name:", name);
     const response: string = `Hello, ${name || "stranger"}!`;

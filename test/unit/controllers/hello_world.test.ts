@@ -7,8 +7,8 @@ describe("controllers", () => {
       it("should return a default string", done => {
         request(server)
           .get("/v1/hello")
-          // .set("Accept", "application/json")
-          // .expect("Content-Type", /json/)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
           .expect(200)
           .end((err, res) => {
             expect(err).toBeFalsy();
@@ -21,8 +21,8 @@ describe("controllers", () => {
         request(server)
           .get("/v1/hello")
           .query({ name: "Scott" })
-          // .set("Accept", "application/json")
-          // .expect("Content-Type", /json/)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
           .expect(200)
           .end((err, res) => {
             expect(err).toBeFalsy();
