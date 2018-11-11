@@ -1,45 +1,28 @@
-import _ from "lodash";
-import logger from "../../utils/logger";
-/*
- 'use strict' is not required but helpful for turning syntactical errors into true errors in the program flow
- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
-*/
-
-/*
- Modules make it possible to import JavaScript files into your application.  Modules are imported
- using 'require' statements that give you a reference to the module.
-
-  It is a good idea to list the modules that your application depends on in the package.json in the project root
- */
 import express from "express";
+import _ from "lodash";
+import {
+  Body,
+  Controller,
+  JsonController,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  QueryParam
+} from "routing-controllers";
 import util from "util";
+import logger from "../../utils/logger";
 const router = express.Router();
 
-/*
- Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
+@JsonController()
+class HelloWorldController {
+  @Get("/v1/hello")
+  public getHello(@QueryParam("name") name: string): string {
+    logger.debug("User's name:", name);
+    const response: string = `Hello, ${name || "stranger"}!`;
+    return response;
+  }
+}
 
- For a controller in a127 (which this is) you should export the functions referenced in your Swagger document by name.
-
- Either:
-  - The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
-  - Or the operationId associated with the operation in your Swagger document
-
-  In the starter/skeleton project the 'get' operation on the '/hello' path has an operationId named 'hello'.  Here,
-  we specify that in the exports of this module that 'hello' maps to the function named 'hello'
- */
-/*
-  Functions in a127 controllers used for operations should take two parameters:
-
-  Param 1: a handle to the request object
-  Param 2: a handle to the response object
- */
-const getHello = (req, res) => {
-  logger.debug("hello world request query param:", req.query);
-  const name = _.get(req, "query.name", "stranger");
-  const response: string = `Hello, ${name}!`;
-  res.json(response);
-};
-
-router.get("/", getHello);
-
-export default router;
+export default HelloWorldController;
