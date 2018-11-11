@@ -1,5 +1,5 @@
 import request from "supertest";
-import server from "../../../server";
+import server from "../../../src/server";
 
 describe("controllers", () => {
   describe("hello_world", () => {
