@@ -4,10 +4,34 @@
   "jsRules": {},
   "rules": {
     "quotemark": [true, "double"],
+    "no-var-requires": true,
     "trailing-comma": false,
     "arrow-parens": false,
     "ordered-imports": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "public-static-field",
+          "public-static-method",
+          "protected-static-field",
+          "protected-static-method",
+          "private-static-field",
+          "private-static-method",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "public-constructor",
+          "protected-constructor",
+          "private-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
+    ],
+    "jsdoc-format": true
   },
   "rulesDirectory": []
 }

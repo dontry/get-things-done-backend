@@ -1,6 +1,10 @@
 import * as bcrypt from "bcrypt";
+import { IsNotEmpty } from "class-validator";
+import { Entity, ObjectIdColumn, Column } from "typeorm";
+import Name from "./Name";
 
-class User {
+@Entity()
+export class User {
   public static async hashPassword(password: string): Promise<string> {
     try {
       return await bcrypt.hash(password, 10);
@@ -21,25 +25,31 @@ class User {
     }
   }
 
+  @ObjectIdColumn("uuid")
   public id: string;
 
+  @IsNotEmpty()
+  @Column()
   public username: string;
 
+  @IsNotEmpty()
+  @Column()
   public email: string;
 
+  @IsNotEmpty()
+  @Column()
   public password: string;
 
-  public firstName: string;
+  @Column(type => Name)
+  public name: Name;
 
-  public lastName: string;
+  @Column()
+  public age: number;
 
-  public age: string;
-
+  @Column()
   public sex: string;
 
   public toString(): string {
-    return `${this.firstName} ${this.lastName} (${this.email})`;
+    return `${this.name.toString()} (${this.email})`;
   }
 }
-
-export default User;
