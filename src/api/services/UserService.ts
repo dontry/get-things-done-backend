@@ -1,9 +1,11 @@
 import { Service } from "typedi";
 import { OrmRepository } from "typeorm-typedi-extensions";
-import User from "../models/User";
+import { User } from "../models";
+import { UserRepository } from "../repositories";
 
+@Service()
 export class UserService {
-  constructor(@OrmRepository() private userRepository) {}
+  constructor(@OrmRepository() private userRepository: UserRepository) {}
 
   /**
    * find
@@ -46,5 +48,9 @@ export class UserService {
     // this.log.info("Delete a user");
     this.userRepository.delete(id);
     return;
+  }
+
+  public findByEmail(email: string): Promise<User | undefined> {
+    return this.userRepository.findByEmail(email);
   }
 }

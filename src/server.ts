@@ -4,7 +4,7 @@ import HelloWorldController from "./api/controllers/hello_world";
 import path from "path";
 import "reflect-metadata";
 import { createExpressServer } from "routing-controllers";
-import logger from "./utils/logger";
+import { logger } from "./utils";
 
 dotenv.config({ path: ".env" });
 const port = process.env.PORT || 10010;

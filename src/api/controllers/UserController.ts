@@ -1,6 +1,7 @@
 import { UserService } from "../services";
-import { Get, OnUndefined, Param } from "routing-controllers";
+import { Get, OnUndefined, Param, HttpError } from "routing-controllers";
 import { User } from "../models";
+import { UserNotFoundError } from "../errors/UserNotFoundError";
 
 export class UserController {
   constructor(private userService: UserService) {}
@@ -11,8 +12,8 @@ export class UserController {
   }
 
   @Get("/:id")
-  // @OnUndefined("xxx")
-  public findOne(@Param("id") id: string): Promise<User> {
+  @OnUndefined(UserNotFoundError)
+  public findOne(@Param("id") id: string): Promise<User | undefined> {
     return this.userService.findOne(id);
   }
 }

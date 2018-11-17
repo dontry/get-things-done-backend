@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsEmail, Min, IsInt } from "class-validator";
 import { Entity, ObjectIdColumn, Column } from "typeorm";
 import Name from "./Name";
 
@@ -25,7 +25,7 @@ export class User {
     }
   }
 
-  @ObjectIdColumn("uuid")
+  @ObjectIdColumn()
   public id: string;
 
   @IsNotEmpty()
@@ -33,6 +33,7 @@ export class User {
   public username: string;
 
   @IsNotEmpty()
+  @IsEmail()
   @Column()
   public email: string;
 
@@ -43,6 +44,8 @@ export class User {
   @Column(type => Name)
   public name: Name;
 
+  @IsInt()
+  @Min(10, { message: "The use is too young to get registered" })
   @Column()
   public age: number;
 

@@ -1,7 +1,9 @@
 import { Container } from "typedi";
-import winstonLogger from "../utils/logger";
+import { logger as winstonLogger } from "../utils";
 
 const Logger = (scope: string): any => (
   object: any,
   propertyName: string
-): any => {};
+): any => {
+  return;
+};

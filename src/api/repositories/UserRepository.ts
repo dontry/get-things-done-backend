@@ -1,13 +1,15 @@
 import { User } from "../models";
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, MongoRepository } from "typeorm";
+import { Service } from "typedi";
 
+// create custom Repostory class
+@Service()
 @EntityRepository(User)
-export class UserRepository extends Repository<User> {
+export class UserRepository extends MongoRepository<User> {
   /**
    * findById
    */
-  public findById(id: string): Promise<User[]> {
-   return this.creat 
+  public findByEmail(email: string): Promise<User | undefined> {
+    return this.findOne({ email });
   }
-
 }
