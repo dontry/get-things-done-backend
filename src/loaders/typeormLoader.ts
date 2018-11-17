@@ -33,23 +33,15 @@ export const typeormLoader: MicroframeworkLoader = async (
   const userRepository = Container.get(UserRepository);
 
   const user = new User();
-  user.username = "jojo";
+  user.username = "sssso";
   user.password = "adf2313212";
   user.email = "john.joestar@test.com";
   user.name = { firstName: "John", lastName: "Doe" };
-  // // const userService = new UserService(repository);
-  const list = await userRepository.find();
-  // // const list = await connection.manager.find(User);
+  user.age = -1100;
+  const userService = new UserService(userRepository);
+  const list = await userService.find();
   logger.info("user list:", list);
-  // // await connection.manager.save(user);
-  // const dd = userRepository.findByEmail(user.email);
-  // logger.info("found user:", dd);
-  // const newUser = await userRepository.save(user);
-  // logger.info("new user:", newUser);
-  const newList = await userRepository.findAll();
-  logger.info("new list:", newList);
-  // user.username = "jojo";
-  const newUser2 = await userRepository.save(user);
+  const newUser2 = await userService.create(user);
   logger.info("saved user:", newUser2);
 
   if (settings) {
