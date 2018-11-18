@@ -2,6 +2,7 @@ import { Service } from "typedi";
 import { OrmRepository } from "typeorm-typedi-extensions";
 import { User } from "../models";
 import { UserRepository } from "../repositories";
+import { ObjectID } from "typeorm";
 
 @Service()
 export class UserService {
@@ -26,9 +27,9 @@ export class UserService {
   /**
    * findOne
    */
-  public findOne(id: string): Promise<User | undefined> {
+  public findById(id: string): Promise<User | undefined> {
     // this.log.info(`Find one user with id ${id}`);
-    return this.userRepository.findOne({ id });
+    return this.userRepository.findOne(id);
   }
 
   /**
@@ -45,7 +46,7 @@ export class UserService {
    */
   public update(id: string, user: User): Promise<User> {
     // this.log.info("Update a user");
-    user.id = id;
+    user.id = new ObjectID(id);
     return this.userRepository.save(user);
   }
 

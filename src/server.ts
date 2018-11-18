@@ -1,4 +1,3 @@
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import HelloWorldController from "./api/controllers/hello_world";
 import path from "path";
