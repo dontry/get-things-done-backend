@@ -8,11 +8,19 @@ export class UserService {
   constructor(@OrmRepository() private userRepository: UserRepository) {}
 
   /**
-   * find
+   * findAll
    */
-  public find(): Promise<User[]> {
+  public findAll(): Promise<User[]> {
     // this.log.info("Find all users");
     return this.userRepository.find();
+  }
+
+  /**
+   * find
+   */
+  public find(params: object): Promise<User[]> {
+    // this.log.info("Find all users");
+    return this.userRepository.find(params);
   }
 
   /**
@@ -48,9 +56,5 @@ export class UserService {
     // this.log.info("Delete a user");
     this.userRepository.delete(id);
     return;
-  }
-
-  public findByEmail(email: string): Promise<User | undefined> {
-    return this.userRepository.findByEmail(email);
   }
 }
