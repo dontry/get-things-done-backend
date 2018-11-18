@@ -3,8 +3,12 @@ import {
   MicroframeworkSettings,
   MicroframeworkLoader
 } from "microframework-w3tec";
-import { createConnection, getConnectionOptions, useContainer } from "typeorm";
-import { MongoConnectionOptions } from "typeorm/driver/mongodb/MongoConnectionOptions";
+import {
+  createConnection,
+  getConnectionOptions,
+  useContainer,
+  ConnectionOptions
+} from "typeorm";
 import { User } from "../api/models";
 import { UserService } from "../api/services";
 import { UserRepository } from "../api/repositories";
@@ -16,20 +20,20 @@ export const typeormLoader: MicroframeworkLoader = async (
   settings: MicroframeworkSettings | undefined
 ) => {
   logger.debug("typeormLoader is loaded");
-  // const loadedConnectionOptions: MongoConnectionOptions = await getConnectionOptions();
-  const connectionOptions: MongoConnectionOptions = {
-    type: "mongodb",
-    host: "localhost",
-    database: "gtd",
-    synchronize: true,
-    logging: false,
-    entities: ["src/api/models/*.ts"],
-    cli: {
-      entitiesDir: "src/api/models"
-    }
-  };
+  const loadedConnectionOptions: ConnectionOptions = await getConnectionOptions();
+  // const connectionOptions: MongoConnectionOptions = {
+  //   type: "mongodb",
+  //   host: "localhost",
+  //   database: "gtd",
+  //   synchronize: true,
+  //   logging: false,
+  //   entities: ["src/api/models/*.ts"],
+  //   cli: {
+  //     entitiesDir: "src/api/models"
+  //   }
+  // };
 
-  const connection = await createConnection(connectionOptions);
+  const connection = await createConnection(loadedConnectionOptions);
   const userRepository = Container.get(UserRepository);
 
   const user = new User();

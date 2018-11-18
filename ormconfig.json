@@ -1,9 +1,9 @@
 {
   "type": "mongodb",
   "host": "localhost",
-  "database": "test",
+  "database": "gtd",
   "synchronize": true,
-  "logging": false,
+  "logging": true,
   "entities": ["src/api/models/*.ts"],
   "cli": {
     "entitiesDir": "src/api/models"
