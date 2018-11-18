@@ -12,11 +12,11 @@ import {
   QueryParam
 } from "routing-controllers";
 import util from "util";
-import logger from "../../utils/logger";
+import { logger } from "../../utils";
 const router = express.Router();
 
 @JsonController()
-class HelloWorldController {
+export class HelloWorldController {
   @Get("/hello")
   public getHello(@QueryParam("name") name: string): string {
     logger.debug("User's name:", name);

@@ -15,7 +15,6 @@ import { UserRepository } from "../api/repositories";
 import { Container } from "typedi";
 import { logger } from "../utils";
 
-useContainer(Container);
 export const typeormLoader: MicroframeworkLoader = async (
   settings: MicroframeworkSettings | undefined
 ) => {
@@ -34,19 +33,6 @@ export const typeormLoader: MicroframeworkLoader = async (
   // };
 
   const connection = await createConnection(loadedConnectionOptions);
-  const userRepository = Container.get(UserRepository);
-
-  const user = new User();
-  user.username = "sssso";
-  user.password = "adf2313212";
-  user.email = "john.joestar@test.com";
-  user.name = { firstName: "John", lastName: "Doe" };
-  user.age = -1100;
-  const userService = new UserService(userRepository);
-  const list = await userService.find();
-  logger.info("user list:", list);
-  const newUser2 = await userService.create(user);
-  logger.info("saved user:", newUser2);
 
   if (settings) {
     settings.setData("connection", connection);

@@ -4,7 +4,7 @@ import {
   MicroframeworkSettings
 } from "microframework-w3tec";
 import { createExpressServer } from "routing-controllers";
-import HelloWorldController from "../api/controllers/hello_world";
+import { HelloWorldController, UserController } from "../api/controllers";
 import { logger } from "../utils";
 
 export const expressLoader: MicroframeworkLoader = (
@@ -20,7 +20,7 @@ export const expressLoader: MicroframeworkLoader = (
       classTransformer: true,
       routePrefix: "/v1",
       defaultErrorHandler: false,
-      controllers: [__dirname + "api/controllers/**/*.js"]
+      controllers: [HelloWorldController, UserController]
     });
     expressApp.listen(10010, () => {
       logger.info(`Express is running`);

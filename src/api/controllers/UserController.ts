@@ -1,8 +1,15 @@
 import { UserService } from "../services";
-import { Get, OnUndefined, Param, HttpError } from "routing-controllers";
+import {
+  Get,
+  OnUndefined,
+  Param,
+  HttpError,
+  JsonController
+} from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 
+@JsonController("/users")
 export class UserController {
   constructor(private userService: UserService) {}
 
