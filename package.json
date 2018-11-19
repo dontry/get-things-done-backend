@@ -65,10 +65,10 @@
     "start": "npm run serve",
     "test": "swagger project test",
     "jest": "jest --forceExit --coverage --verbose",
-    "watch-node": "nodemon dist/server.js",
+    "watch-node": "nodemon dist/index.js",
     "watch": "nodemon dist/",
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node  --inspect-brk=5858 src/index.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "serve": "node dist/server.js"
+    "serve": "node dist/index.js"
   }
 }
