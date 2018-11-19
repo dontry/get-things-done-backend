@@ -52,22 +52,6 @@ export class User {
   @Column()
   public sex: string | undefined;
 
-  constructor(
-    username: string,
-    email: string,
-    password: string,
-    name: Name,
-    age?: number,
-    sex?: string
-  ) {
-    this.username = username;
-    this.email = email;
-    this.password = password;
-    this.name = name;
-    this.age = age;
-    this.sex = sex;
-  }
-
   public toString(): string {
     return `${this.name.toString()} (${this.email})`;
   }
