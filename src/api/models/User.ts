@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { IsNotEmpty, IsEmail, Min, IsInt } from "class-validator";
 import { Entity, ObjectIdColumn, Column, ObjectID } from "typeorm";
-import Name from "./Name";
+import fullName from "./Name";
 
 @Entity()
 export class User {
@@ -41,18 +41,18 @@ export class User {
   @Column()
   public password: string;
 
-  @Column(type => Name)
-  public name: Name;
+  @Column(type => fullName)
+  public fullName: fullName;
 
   @IsInt()
   @Min(10, { message: "The use is too young to get registered" })
-  @Column()
+  @Column({ default: -1 })
   public age: number | undefined;
 
   @Column()
   public sex: string | undefined;
 
   public toString(): string {
-    return `${this.name.toString()} (${this.email})`;
+    return `${this.fullName.toString()} (${this.email})`;
   }
 }

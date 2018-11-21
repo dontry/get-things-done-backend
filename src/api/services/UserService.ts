@@ -3,6 +3,7 @@ import { OrmRepository } from "typeorm-typedi-extensions";
 import { User } from "../models";
 import { UserRepository } from "../repositories";
 import { ObjectID } from "typeorm";
+import { validate } from "class-validator";
 
 @Service()
 export class UserService {
@@ -37,7 +38,15 @@ export class UserService {
    */
   public create(user: User): Promise<User> {
     // this.log.info(`Create a new user => ${user.toString()}`);
-    return this.userRepository.save(user);
+    return new Promise((resolve, reject) =>
+      validate(user).then(errors => {
+        if (errors.length > 0) {
+          reject(errors);
+        } else {
+          resolve(this.userRepository.save(user));
+        }
+      })
+    );
     // this.eventDispatcher.dispatch(events.user.created, newUser);
   }
 
