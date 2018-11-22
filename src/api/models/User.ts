@@ -1,7 +1,8 @@
 import * as bcrypt from "bcrypt";
-import { IsNotEmpty, IsEmail, Min, IsInt } from "class-validator";
+import { IsNotEmpty, Min, IsInt, IsEmail, Validate } from "class-validator";
 import { Entity, ObjectIdColumn, Column, ObjectID } from "typeorm";
-import fullName from "./Name";
+import FullName from "./FullName";
+import { PasswordPattern } from "../validators";
 
 @Entity()
 export class User {
@@ -32,17 +33,18 @@ export class User {
   @Column()
   public username: string;
 
-  @IsNotEmpty()
   @IsEmail()
+  @IsNotEmpty()
   @Column()
   public email: string;
 
+  @Validate(PasswordPattern)
   @IsNotEmpty()
   @Column()
   public password: string;
 
-  @Column(type => fullName)
-  public fullName: fullName;
+  @Column(type => FullName)
+  public fullName: FullName;
 
   @IsInt()
   @Min(10, { message: "The use is too young to get registered" })

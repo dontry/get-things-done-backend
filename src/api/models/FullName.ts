@@ -1,7 +1,7 @@
 import { Entity, Column } from "typeorm";
 import { IsNotEmpty } from "class-validator";
 
-class fullName {
+class FullName {
   @IsNotEmpty()
   @Column({ name: "first_name" })
   public firstName: string;
@@ -15,4 +15,4 @@ class fullName {
   }
 }
 
-export default fullName;
+export default FullName;
