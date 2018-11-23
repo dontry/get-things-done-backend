@@ -1,6 +1,7 @@
 import faker from "faker";
 import { validate } from "class-validator";
 import { User } from "../../../src/api/models/User";
+import { Sex } from "../../../src/api/types/Sex";
 
 faker.seed();
 
@@ -15,6 +16,7 @@ describe("User validations:", () => {
   const email = faker.internet.email();
   const password = "Jojo88@xx.yck";
   const age = 20;
+  const sex = Sex.MALE;
 
   it("should have a username", async done => {
     const user = new User();
@@ -117,6 +119,19 @@ describe("User validations:", () => {
     const errors2 = await validate(user);
     const emailError2 = errors2.find(e => e.property === "email");
     expect(emailError2).toBeUndefined();
+    done();
+  });
+
+  it("should only accept MALE, FEMALE, and OTHER for sex", async done => {
+    const user = new User();
+    user.username = username;
+    user.email = "invalid emal";
+    user.password = password;
+    user.age = age;
+    user.email = email;
+    user.sex = sex;
+    const errors = await validate(user);
+    expect(errors.length).toEqual(0);
     done();
   });
 });

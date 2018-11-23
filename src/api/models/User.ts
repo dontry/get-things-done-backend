@@ -3,6 +3,7 @@ import { IsNotEmpty, Min, IsInt, IsEmail, Validate } from "class-validator";
 import { Entity, ObjectIdColumn, Column, ObjectID } from "typeorm";
 import FullName from "./FullName";
 import { PasswordPattern } from "../validators";
+import { Sex } from "../types/Sex";
 
 @Entity()
 export class User {
@@ -52,7 +53,7 @@ export class User {
   public age: number | undefined;
 
   @Column()
-  public sex: string | undefined;
+  public sex: Sex;
 
   public toString(): string {
     return `${this.fullName.toString()} (${this.email})`;
