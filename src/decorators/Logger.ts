@@ -1,9 +1,15 @@
 import { Container } from "typedi";
-import { logger as winstonLogger } from "../utils";
+import { logger } from "../utils";
+import { string } from "joi";
 
-const Logger = (scope: string): any => (
-  object: any,
-  propertyName: string
-): any => {
-  return;
+// TODO: scope
+export const Logger = (scope?: string): any => {
+  return (object: any, propertyName: string, index?: number): any => {
+    Container.registerHandler({
+      object,
+      propertyName,
+      index,
+      value: () => logger
+    });
+  };
 };

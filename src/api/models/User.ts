@@ -56,6 +56,31 @@ export class User {
   public sex: Sex;
 
   public toString(): string {
-    return `${this.fullName.toString()} (${this.email})`;
+    return `username: ${this.username},
+            email: ${this.email},
+            full name: ${this.fullName ? this.fullName : ""}
+            `;
+  }
+
+  public create(
+    username: string,
+    password: string,
+    email: string,
+    fullName?: FullName,
+    age?: number,
+    sex?: Sex
+  ) {
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    if (fullName) {
+      this.fullName = fullName;
+    }
+    if (age) {
+      this.age = age;
+    }
+    if (sex) {
+      this.sex = sex;
+    }
   }
 }

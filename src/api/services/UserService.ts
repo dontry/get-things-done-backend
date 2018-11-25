@@ -4,16 +4,21 @@ import { User } from "../models";
 import { UserRepository } from "../repositories";
 import { ObjectID } from "typeorm";
 import { validate } from "class-validator";
+import { Logger } from "../../decorators";
+import { ILogger } from "../../utils";
 
 @Service()
 export class UserService {
-  constructor(@OrmRepository() private userRepository: UserRepository) {}
+  constructor(
+    @OrmRepository() private userRepository: UserRepository,
+    @Logger() private log: ILogger
+  ) {}
 
   /**
    * findAll
    */
   public findAll(): Promise<User[]> {
-    // this.log.info("Find all users");
+    this.log.info("Find all users");
     return this.userRepository.find();
   }
 
@@ -21,7 +26,7 @@ export class UserService {
    * find
    */
   public find(params: object): Promise<User[]> {
-    // this.log.info("Find all users");
+    this.log.info("Find users with params");
     return this.userRepository.find(params);
   }
 
@@ -29,7 +34,7 @@ export class UserService {
    * findOne
    */
   public findById(id: string): Promise<User | undefined> {
-    // this.log.info(`Find one user with id ${id}`);
+    this.log.info(`Find one user with id ${id}`);
     return this.userRepository.findOne(id);
   }
 
@@ -37,7 +42,7 @@ export class UserService {
    * create
    */
   public create(user: User): Promise<User> {
-    // this.log.info(`Create a new user => ${user.toString()}`);
+    this.log.info(`Create a new user => ${user.toString()}`);
     return new Promise((resolve, reject) =>
       validate(user).then(errors => {
         if (errors.length > 0) {
@@ -54,7 +59,7 @@ export class UserService {
    * update
    */
   public update(id: string, user: User): Promise<User> {
-    // this.log.info("Update a user");
+    this.log.info("Update a user");
     user.id = new ObjectID(id);
     return this.userRepository.save(user);
   }
@@ -63,7 +68,7 @@ export class UserService {
    * delete
    */
   public async delete(id: string): Promise<void> {
-    // this.log.info("Delete a user");
+    this.log.info("Delete a user");
     this.userRepository.delete(id);
     return;
   }

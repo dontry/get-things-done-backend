@@ -3,8 +3,7 @@ import { validate } from "class-validator";
 import { User } from "../../../src/api/models/User";
 import { Sex } from "../../../src/api/types/Sex";
 
-faker.seed();
-
+faker.seed(10);
 describe("User validations:", () => {
   const username = faker.name.findName();
   const firstName = faker.name.firstName();
@@ -125,13 +124,14 @@ describe("User validations:", () => {
   it("should only accept MALE, FEMALE, and OTHER for sex", async done => {
     const user = new User();
     user.username = username;
-    user.email = "invalid emal";
+    user.email = email;
     user.password = password;
     user.age = age;
     user.email = email;
     user.sex = sex;
     const errors = await validate(user);
-    expect(errors.length).toEqual(0);
+    const sexError = errors.find(e => e.property === "sex");
+    expect(sexError).toBeUndefined();
     done();
   });
 });

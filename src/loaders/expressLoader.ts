@@ -5,6 +5,7 @@ import {
 } from "microframework-w3tec";
 import { createExpressServer } from "routing-controllers";
 import { HelloWorldController, UserController } from "../api/controllers";
+import { LoggingMiddleware } from "../api/middlewares";
 import { logger } from "../utils";
 
 export const expressLoader: MicroframeworkLoader = (
@@ -20,7 +21,8 @@ export const expressLoader: MicroframeworkLoader = (
       classTransformer: true,
       routePrefix: "/v1",
       defaultErrorHandler: false,
-      controllers: [HelloWorldController, UserController]
+      controllers: [HelloWorldController, UserController],
+      middlewares: [LoggingMiddleware]
     });
     expressApp.listen(10010, () => {
       logger.info(`Express is running`);

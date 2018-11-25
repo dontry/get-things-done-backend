@@ -11,7 +11,11 @@ class FullName {
   public lastName: string;
 
   public toString(): string {
-    return `${this.firstName} ${this.lastName}`;
+    if (this.firstName && this.lastName) {
+      return `${this.firstName} ${this.lastName}`;
+    } else {
+      return `No full name.`;
+    }
   }
 }
 

@@ -110,6 +110,10 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/faker@^4.1.4":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-4.1.4.tgz#5e5bcd81a6ecf85fb6150f7eb857e755a09fd91f"
+
 "@types/glob@*":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.1.tgz#aa59a1c6e3fbc421e07ccd31a944c30eba521575"
@@ -182,6 +186,12 @@
     "@types/events" "*"
     "@types/mongodb" "*"
     "@types/node" "*"
+
+"@types/morgan@^1.7.35":
+  version "1.7.35"
+  resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.7.35.tgz#6358f502931cc2583d7a94248c41518baa688494"
+  dependencies:
+    "@types/express" "*"
 
 "@types/multer@0.0.32":
   version "0.0.32"
@@ -669,6 +679,12 @@ base@^0.11.1:
     isobject "^3.0.1"
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
+
+basic-auth@~2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
+  dependencies:
+    safe-buffer "5.1.2"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
@@ -3198,6 +3214,16 @@ mongoose@^5.3.10:
     regexp-clone "0.0.1"
     safe-buffer "5.1.2"
     sliced "1.0.1"
+
+morgan@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
+  dependencies:
+    basic-auth "~2.0.0"
+    debug "2.6.9"
+    depd "~1.1.2"
+    on-finished "~2.3.0"
+    on-headers "~1.0.1"
 
 mpath@0.5.1:
   version "0.5.1"
