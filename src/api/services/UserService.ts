@@ -26,8 +26,16 @@ export class UserService {
    * find
    */
   public find(params: object): Promise<User[]> {
-    this.log.info("Find users with params");
+    this.log.info(`Find users with params: ${params}`);
     return this.userRepository.find(params);
+  }
+
+  /**
+   * findOne
+   */
+  public findOne(params: object): Promise<User | undefined> {
+    this.log.info(`Find a user with params: ${params}`);
+    return this.userRepository.findOne(params);
   }
 
   /**

@@ -11,7 +11,6 @@ import {
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { logger } from "../../utils";
-import { ObjectID } from "typeorm";
 
 @JsonController("/users")
 export class UserController {
