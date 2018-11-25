@@ -1,6 +1,14 @@
 import * as bcrypt from "bcrypt";
 import { IsNotEmpty, Min, IsInt, IsEmail, Validate } from "class-validator";
-import { Entity, ObjectIdColumn, Column, ObjectID } from "typeorm";
+import {
+  Entity,
+  ObjectIdColumn,
+  Column,
+  ObjectID,
+  BeforeInsert,
+  AfterLoad
+} from "typeorm";
+import { Exclude } from "class-transformer";
 import FullName from "./FullName";
 import { PasswordPattern } from "../validators";
 import { Sex } from "../types/Sex";
@@ -42,6 +50,7 @@ export class User {
   @Validate(PasswordPattern)
   @IsNotEmpty()
   @Column()
+  @Exclude()
   public password: string;
 
   @Column(type => FullName)
@@ -82,5 +91,10 @@ export class User {
     if (sex) {
       this.sex = sex;
     }
+  }
+
+  @BeforeInsert()
+  public async hasPassword(): Promise<void> {
+    this.password = await User.hashPassword(this.password);
   }
 }
