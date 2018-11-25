@@ -31,6 +31,13 @@ export class UserService {
   }
 
   /**
+   * count
+   */
+  public count(): Promise<number> {
+    return this.userRepository.count();
+  }
+
+  /**
    * findOne
    */
   public findById(id: string): Promise<User | undefined> {

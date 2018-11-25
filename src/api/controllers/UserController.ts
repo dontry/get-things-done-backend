@@ -18,6 +18,11 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
+  public find(): Promise<User[]> {
+    return this.userService.findAll();
+  }
+
+  @Get()
   @OnUndefined(UserNotFoundError)
   public findByUsername(
     @QueryParam("username") username: string
@@ -25,16 +30,16 @@ export class UserController {
     return this.userService.find({ username });
   }
 
+  @Get("/count")
+  public count(): Promise<number> {
+    return this.userService.count();
+  }
+
   @Get("/:id")
   @OnUndefined(UserNotFoundError)
   public findOne(@Param("id") id: string): Promise<User | undefined> {
     // const objectId: ObjectID = new ObjectID(id);
     return this.userService.findById(id);
-  }
-
-  @Get()
-  public find(): Promise<User[]> {
-    return this.userService.findAll();
   }
 
   @Post()
