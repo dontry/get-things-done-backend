@@ -1,2 +1,2 @@
 export { LoggingMiddleware } from "./LoggingMiddleware";
-export { JWTMiddleware } from "./JWTMiddleware";
+export * from "./PassportMiddlewares";

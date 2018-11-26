@@ -7,6 +7,7 @@ import { createExpressServer } from "routing-controllers";
 import { HelloWorldController, UserController } from "../api/controllers";
 import { LoggingMiddleware } from "../api/middlewares";
 import { logger } from "../utils";
+import { Passport } from "../auth";
 
 export const expressLoader: MicroframeworkLoader = (
   settings: MicroframeworkSettings | undefined
@@ -24,6 +25,10 @@ export const expressLoader: MicroframeworkLoader = (
       controllers: [HelloWorldController, UserController],
       middlewares: [LoggingMiddleware]
     });
+
+    // Authentication
+    Passport.useLocalStrategy();
+
     expressApp.listen(10010, () => {
       logger.info(`Express is running`);
     });

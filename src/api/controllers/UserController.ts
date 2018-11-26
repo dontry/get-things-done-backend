@@ -6,12 +6,15 @@ import {
   OnUndefined,
   Param,
   JsonController,
-  QueryParam
+  QueryParam,
+  UseBefore
 } from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { logger } from "../../utils";
+import { LocalAuthMiddleware } from "../middlewares";
 
+@UseBefore(LocalAuthMiddleware)
 @JsonController("/users")
 export class UserController {
   constructor(private userService: UserService) {}
