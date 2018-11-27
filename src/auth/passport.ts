@@ -16,7 +16,6 @@ export class Passport {
         const userService = Container.get(UserService);
         try {
           const user = await userService.findOne({ username, password });
-          console.log("user:", user);
           if (!user) {
             return done(null, false);
           }

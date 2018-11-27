@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import { Passport } from "../../auth";
 import { UserNotFoundError } from "../errors";
+import { classToPlain } from "class-transformer";
 
 @JsonController("/auth")
 export class AuthController {
@@ -22,16 +23,25 @@ export class AuthController {
     @Req() request: any,
     @Res() response: any,
     @Body() body: any
-  ): void {
-    passport.authenticate("local", { session: false }, (error, user, info) => {
-      if (error || !user) {
-        return response.status(400).json({
-          message: info ? info.message : "Login failed",
-          user
-        });
-      }
-      const token = jwt.sign(user, "token");
-      return response.json({ user, token });
-    })(request, response);
+  ): Promise<any> {
+    return new Promise((res, rej) => {
+      passport.authenticate(
+        "local",
+        { session: false },
+        (error, user, info) => {
+          console.log("error", error);
+          console.log("user:", user);
+          if (error || !user) {
+            return rej({
+              message: info ? info.message : "Login failed",
+              user
+            });
+          }
+
+          const token = jwt.sign(classToPlain(user), "token");
+          return res({ user, token });
+        }
+      )(request, response);
+    });
   }
 }
