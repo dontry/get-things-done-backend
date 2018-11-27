@@ -1,2 +1,2 @@
 export { LocalAuthMiddleware } from "./LocalAuthMiddleware";
-export { JWTAuthMiddleware } from "./JWTAuthMiddleware";
+export { JwtAuthMiddleware } from "./JwtAuthMiddleware";

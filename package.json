@@ -23,6 +23,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "faker": "^4.1.0",
+    "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "microframework-w3tec": "^0.6.3",
     "mongodb": "^3.1.9",

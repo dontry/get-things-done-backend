@@ -12,17 +12,11 @@ import {
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { logger } from "../../utils";
-import { LocalAuthMiddleware } from "../middlewares";
 
-@UseBefore(LocalAuthMiddleware)
+// @UseBefore(LocalAuthMiddleware)
 @JsonController("/users")
 export class UserController {
   constructor(private userService: UserService) {}
-
-  @Get()
-  public find(): Promise<User[]> {
-    return this.userService.findAll();
-  }
 
   @Get()
   @OnUndefined(UserNotFoundError)
@@ -32,6 +26,11 @@ export class UserController {
     return this.userService.find({ username });
   }
 
+  @Get()
+  public find(): Promise<User[]> {
+    return this.userService.findAll();
+  }
+
   @Get("/count")
   public count(): Promise<number> {
     return this.userService.count();
@@ -39,7 +38,7 @@ export class UserController {
 
   @Get("/:id")
   @OnUndefined(UserNotFoundError)
-  public findOne(@Param("id") id: string): Promise<User | undefined> {
+  public findById(@Param("id") id: string): Promise<User | undefined> {
     // const objectId: ObjectID = new ObjectID(id);
     return this.userService.findById(id);
   }

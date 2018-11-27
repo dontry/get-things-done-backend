@@ -1,6 +1,6 @@
 import { PassportMiddleware } from "./PassportMiddleware";
 
-export class JWTAuthMiddleware extends PassportMiddleware {
+export class JwtAuthMiddleware extends PassportMiddleware {
   constructor() {
     super("jwt");
   }
