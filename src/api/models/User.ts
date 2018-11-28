@@ -5,13 +5,14 @@ import {
   ObjectIdColumn,
   Column,
   ObjectID,
-  BeforeInsert,
-  AfterLoad
+  BeforeInsert
 } from "typeorm";
-import { Exclude } from "class-transformer";
+import { Exclude, Transform } from "class-transformer";
 import FullName from "./FullName";
 import { PasswordPattern } from "../validators";
 import { Sex } from "../types/Sex";
+import { ObjectId } from "bson";
+import { toHexString } from "../../utils";
 
 @Entity()
 export class User {
@@ -36,10 +37,13 @@ export class User {
   }
 
   @ObjectIdColumn()
-  public id: ObjectID;
+  @Transform((id: any) => {
+    return toHexString(id.id);
+  })
+  public id: ObjectId;
 
   @IsNotEmpty()
-  @Column()
+  @Column({ unique: true })
   public username: string;
 
   @IsEmail()

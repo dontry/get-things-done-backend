@@ -11,6 +11,8 @@ import passport from "passport";
 import { Passport } from "../../auth";
 import { UserNotFoundError } from "../errors";
 import { classToPlain } from "class-transformer";
+import { request } from "https";
+import { response } from "spdy";
 
 @JsonController("/auth")
 export class AuthController {
@@ -29,12 +31,11 @@ export class AuthController {
         "local",
         { session: false },
         (error, user, info) => {
-          console.log("error", error);
-          console.log("user:", user);
+          console.error("aurth error:", error);
           if (error || !user) {
             return rej({
               message: info ? info.message : "Login failed",
-              user
+              error
             });
           }
 
