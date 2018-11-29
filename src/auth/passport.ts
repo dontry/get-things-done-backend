@@ -33,13 +33,13 @@ export class Passport {
   public static useJWTStrategy() {
     const opts = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "getthingsdone"
+      secretOrKey: "token"
     };
+    const userService = Container.get(UserService);
     passport.use(
-      new JwtStrategy(opts, (jwtPayload, done) => {
-        const userService = Container.get(UserService);
+      new JwtStrategy(opts, async (jwtPayload, done) => {
         try {
-          const user = userService.findById(jwtPayload.id);
+          const user = await userService.findById(jwtPayload.id);
           return done(null, user);
         } catch (error) {
           return done(null, false);

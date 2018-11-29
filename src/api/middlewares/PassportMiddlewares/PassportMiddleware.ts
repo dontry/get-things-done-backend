@@ -20,7 +20,6 @@ export class PassportMiddleware implements ExpressMiddlewareInterface {
       if (error || !user) {
         return next(new UnauthorizedError(info));
       }
-
       request.user = user;
       return next();
     })(request, response, next);

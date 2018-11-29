@@ -4,15 +4,13 @@ import {
   Res,
   Req,
   Body,
-  OnUndefined
+  OnUndefined,
+  UseBefore
 } from "routing-controllers";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { Passport } from "../../auth";
-import { UserNotFoundError } from "../errors";
 import { classToPlain } from "class-transformer";
-import { request } from "https";
-import { response } from "spdy";
 
 @JsonController("/auth")
 export class AuthController {

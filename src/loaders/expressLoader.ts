@@ -21,6 +21,7 @@ export const expressLoader: MicroframeworkLoader = (
     // Get data from typeormconfig.json
     const connection = settings.getData("connection");
     Passport.useLocalStrategy();
+    Passport.useJWTStrategy();
 
     const expressApp: Application = createExpressServer({
       cors: true,

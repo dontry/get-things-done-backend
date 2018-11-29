@@ -11,7 +11,6 @@ import { Exclude, Transform } from "class-transformer";
 import FullName from "./FullName";
 import { PasswordPattern } from "../validators";
 import { Sex } from "../types/Sex";
-import { ObjectId } from "bson";
 import { toHexString } from "../../utils";
 
 @Entity()
@@ -40,7 +39,7 @@ export class User {
   @Transform((id: any) => {
     return toHexString(id.id);
   })
-  public id: ObjectId;
+  public id: ObjectID;
 
   @IsNotEmpty()
   @Column({ unique: true })
