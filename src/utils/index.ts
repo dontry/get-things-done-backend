@@ -1,7 +1,11 @@
 export { logger, ILogger } from "./logger";
 
-export const toHexString = (obj: Object): string => {
+// should return a 24  hex characters;
+export const toHexString = (obj: object): string => {
   return Object.keys(obj)
-    .map(key => obj[key].toString(16))
+    .map(key => {
+      const hex = Number(obj[key]).toString(16);
+      return hex.length < 2 ? `0${hex}` : hex; // Always two digits
+    })
     .join("");
 };
