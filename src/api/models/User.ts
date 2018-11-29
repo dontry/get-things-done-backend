@@ -5,7 +5,9 @@ import {
   ObjectIdColumn,
   Column,
   ObjectID,
-  BeforeInsert
+  BeforeInsert,
+  Unique,
+  Index
 } from "typeorm";
 import { Exclude, Transform } from "class-transformer";
 import FullName from "./FullName";
@@ -14,6 +16,7 @@ import { Sex } from "../types/Sex";
 import { toHexString } from "../../utils";
 
 @Entity()
+@Unique(["username"])
 export class User {
   public static async hashPassword(password: string): Promise<string> {
     try {
@@ -42,6 +45,7 @@ export class User {
   public id: ObjectID;
 
   @IsNotEmpty()
+  @Index({ unique: true })
   @Column({ unique: true })
   public username: string;
 
@@ -53,7 +57,7 @@ export class User {
   @Validate(PasswordPattern)
   @IsNotEmpty()
   @Column()
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   public password: string;
 
   @Column(type => FullName)

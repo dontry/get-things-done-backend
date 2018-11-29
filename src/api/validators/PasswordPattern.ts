@@ -15,6 +15,6 @@ export class PasswordPattern implements ValidatorConstraintInterface {
 
   public defaultMessage(args: ValidationArguments) {
     // tslint:disable-next-line:max-line-length
-    return "The password is not secure enough.\n It should contain mi nimum eight characters, at least one letter, one number and one special character.";
+    return "The password is not secure enough.\n It should contain minimum 8 characters, at least one letter, one number and one special character.";
   }
 }

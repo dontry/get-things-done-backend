@@ -3,19 +3,22 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { UserService } from "../api/services";
+import { User } from "../api/models";
+import { Strategy } from "passport-strategy";
 
 export class Passport {
   /**
    * useLocalStrategy
    */
-  public static useLocalStrategy() {
+  public static useLocalStrategy(): void {
     passport.use(
       new LocalStrategy(async (username, password, done) => {
-        console.log("username:", username);
-        console.log("password:", password);
-        const userService = Container.get(UserService);
+        const userService: UserService = Container.get(UserService);
         try {
-          const user = await userService.findOne({ username, password });
+          const user: User | undefined = await userService.findOne({
+            username,
+            password
+          });
           if (!user) {
             return done(null, false);
           }
@@ -30,21 +33,34 @@ export class Passport {
   /**
    * useJWTStrategy
    */
-  public static useJWTStrategy() {
+  public static useJWTStrategy(): void {
     const opts = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: "token"
     };
-    const userService = Container.get(UserService);
+    const userService: UserService = Container.get(UserService);
     passport.use(
       new JwtStrategy(opts, async (jwtPayload, done) => {
         try {
-          const user = await userService.findById(jwtPayload.id);
+          const user: User | undefined = await userService.findById(
+            jwtPayload.id
+          );
           return done(null, user);
         } catch (error) {
           return done(null, false);
         }
       })
     );
+  }
+
+  public static useStrategy(strategies: string[]) {
+    strategies.forEach(strategy => {
+      if (strategy === "local") {
+        this.useLocalStrategy();
+      }
+      if (strategy === "jwt") {
+        this.useJWTStrategy();
+      }
+    });
   }
 }

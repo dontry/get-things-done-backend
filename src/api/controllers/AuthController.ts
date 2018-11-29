@@ -29,7 +29,6 @@ export class AuthController {
         "local",
         { session: false },
         (error, user, info) => {
-          console.error("aurth error:", error);
           if (error || !user) {
             return rej({
               message: info ? info.message : "Login failed",
