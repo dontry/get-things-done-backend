@@ -15,10 +15,17 @@ export const typeormLoader: MicroframeworkLoader = async (
 ) => {
   logger.debug("typeormLoader is loaded");
   const loadedConnectionOptions: ConnectionOptions = await getConnectionOptions();
-  const connectionOptions = Object.assign(loadedConnectionOptions, {
-    type: "mongodb",
-    database: "gtd"
-  });
+  let options = {};
+  logger.info(`NODE_ENV: ${process.env.NODE_ENV}`);
+  if (process.env.NODE_ENV === "production") {
+    options = {
+      entities: ["dist/src/api/models/*.js"],
+      cli: {
+        entitiesDir: "dist/src/api/models"
+      }
+    };
+  }
+  const connectionOptions = Object.assign(loadedConnectionOptions, options);
   const connection = await createConnection(connectionOptions);
 
   if (settings) {

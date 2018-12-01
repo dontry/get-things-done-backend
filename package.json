@@ -76,6 +76,6 @@
     "watch": "nodemon dist/",
     "dev": "ts-node  --inspect-brk=5858 src/index.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "serve": "node dist/src/index.js"
+    "serve": "NODE_ENV=production node dist/src/index.js"
   }
 }
