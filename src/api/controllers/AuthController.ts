@@ -16,6 +16,7 @@ import { classToPlain } from "class-transformer";
 export class AuthController {
   constructor() {
     Passport.useLocalStrategy();
+    Passport.useJWTStrategy();
   }
   @Post("/login")
   @OnUndefined(200)

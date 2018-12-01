@@ -44,8 +44,9 @@ export class User {
   })
   public id: ObjectID;
 
-  @IsNotEmpty()
+  // Unique column: https://github.com/typeorm/typeorm/issues/2034
   @Index({ unique: true })
+  @IsNotEmpty()
   @Column({ unique: true })
   public username: string;
 
@@ -74,7 +75,7 @@ export class User {
   public toString(): string {
     return `username: ${this.username},
             email: ${this.email},
-            full name: ${this.fullName ? this.fullName : ""}
+            full name: ${this.fullName ? this.fullName.toString() : ""}
             `;
   }
 

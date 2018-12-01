@@ -11,7 +11,8 @@ export const createDatabaseConnection = async (): Promise<Connection> => {
     migrations: ["src/database/migrations"],
     cli: {
       entitiesDir: "src/api/models"
-    }
+    },
+    synchronize: true
   });
   return connection;
 };

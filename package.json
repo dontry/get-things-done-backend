@@ -68,7 +68,7 @@
   },
   "scripts": {
     "copy-assets": "ts-node copyStaticAssets.ts",
-    "build-ts": "tsc",
+    "build": "tsc",
     "start": "npm run serve",
     "test": "swagger project test",
     "jest": "jest --forceExit --coverage --verbose",

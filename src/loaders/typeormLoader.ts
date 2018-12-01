@@ -15,7 +15,11 @@ export const typeormLoader: MicroframeworkLoader = async (
 ) => {
   logger.debug("typeormLoader is loaded");
   const loadedConnectionOptions: ConnectionOptions = await getConnectionOptions();
-  const connection = await createConnection(loadedConnectionOptions);
+  const connectionOptions = Object.assign(loadedConnectionOptions, {
+    type: "mongodb",
+    database: "gtd"
+  });
+  const connection = await createConnection(connectionOptions);
 
   if (settings) {
     settings.setData("connection", connection);

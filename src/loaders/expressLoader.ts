@@ -4,14 +4,9 @@ import {
   MicroframeworkSettings
 } from "microframework-w3tec";
 import { createExpressServer } from "routing-controllers";
-import {
-  HelloWorldController,
-  UserController,
-  AuthController
-} from "../api/controllers";
-import { LoggingMiddleware } from "../api/middlewares";
+// import { HelloWorldController } from "../api/controllers";
+// import { LoggingMiddleware } from "../api/middlewares";
 import { logger } from "../utils";
-import { Passport } from "../auth";
 
 export const expressLoader: MicroframeworkLoader = (
   settings: MicroframeworkSettings | undefined
@@ -20,16 +15,14 @@ export const expressLoader: MicroframeworkLoader = (
   if (settings) {
     // Get data from typeormconfig.json
     const connection = settings.getData("connection");
-    Passport.useLocalStrategy();
-    Passport.useJWTStrategy();
 
     const expressApp: Application = createExpressServer({
       cors: true,
       classTransformer: true,
       routePrefix: "/v1",
       // defaultErrorHandler: false,
-      controllers: [HelloWorldController, UserController, AuthController],
-      middlewares: [LoggingMiddleware]
+      controllers: []
+      // middlewares: [LoggingMiddleware]
     });
 
     // Authentication

@@ -16,13 +16,13 @@ export class Passport {
         const userService: UserService = Container.get(UserService);
         try {
           const user: User | undefined = await userService.findOne({
-            username,
-            password
+            username
           });
-          if (!user) {
-            return done(null, false);
+          if (user instanceof User) {
+            const equal: boolean = await User.comparePassword(user, password);
+            return equal ? done(null, user) : done("Password incorrect");
           }
-          return done(null, user);
+          return done(null, false);
         } catch (error) {
           return done(error);
         }
