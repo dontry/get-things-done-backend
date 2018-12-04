@@ -7,13 +7,16 @@ import {
   ObjectID,
   BeforeInsert,
   Unique,
-  Index
+  Index,
+  OneToMany
 } from "typeorm";
 import { Exclude, Transform } from "class-transformer";
 import FullName from "./FullName";
 import { PasswordPattern } from "../validators";
 import { Sex } from "../types/Sex";
 import { toHexString } from "../../utils";
+import { Task } from "./Task";
+import { Project } from "./Project";
 
 @Entity()
 @Unique(["username"])
@@ -72,13 +75,18 @@ export class User {
   @Column()
   public sex: Sex;
 
+  @OneToMany(type => Project, project => project.user, { cascade: true })
+  public projects: Project[];
+
+  @OneToMany(type => Task, task => task.user, { cascade: true })
+  public tasks: Task[];
+
   public toString(): string {
     return `username: ${this.username},
             email: ${this.email},
             full name: ${this.fullName ? this.fullName.toString() : ""}
             `;
   }
-
   public create(
     username: string,
     password: string,
