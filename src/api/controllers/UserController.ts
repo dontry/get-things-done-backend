@@ -7,7 +7,8 @@ import {
   Param,
   JsonController,
   QueryParam,
-  UseBefore
+  UseBefore,
+  Req
 } from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
@@ -33,7 +34,8 @@ export class UserController {
   }
 
   @Get()
-  public findAll(): Promise<User[]> {
+  public findAll(@Req() request): Promise<User[]> {
+    logger.debug(`request user: ${request.user}`);
     return this.userService.findAll();
   }
   @Get()

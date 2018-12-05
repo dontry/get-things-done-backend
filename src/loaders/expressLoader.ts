@@ -7,7 +7,8 @@ import { createExpressServer } from "routing-controllers";
 import {
   HelloWorldController,
   UserController,
-  AuthController
+  AuthController,
+  TaskController
 } from "../api/controllers";
 import { LoggingMiddleware } from "../api/middlewares";
 import { logger } from "../utils";
@@ -28,7 +29,12 @@ export const expressLoader: MicroframeworkLoader = (
       classTransformer: true,
       routePrefix: "/v1",
       // defaultErrorHandler: false,
-      controllers: [HelloWorldController, UserController, AuthController],
+      controllers: [
+        HelloWorldController,
+        UserController,
+        AuthController,
+        TaskController
+      ],
       middlewares: [LoggingMiddleware]
     });
 

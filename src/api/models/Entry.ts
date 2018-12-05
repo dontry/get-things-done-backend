@@ -70,4 +70,8 @@ export abstract class Entry {
   constructor(title: string) {
     this.title = title;
   }
+
+  public toString(): string {
+    return `${this.title}`;
+  }
 }
