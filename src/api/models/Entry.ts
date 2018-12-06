@@ -2,6 +2,7 @@ import { Entity, ObjectIdColumn, Column, Index, ObjectID } from "typeorm";
 import { Transform } from "class-transformer";
 import { toHexString } from "../../utils";
 import { IsNotEmpty, Min, Max } from "class-validator";
+import Note from "./Note";
 
 @Entity()
 export abstract class Entry {
@@ -65,7 +66,7 @@ export abstract class Entry {
   public tags: string[];
 
   @Column()
-  public note: string;
+  public note: Note;
 
   constructor(title: string) {
     this.title = title;

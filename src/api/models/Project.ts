@@ -1,17 +1,14 @@
 import { Task } from "./Task";
-import { Entity, OneToMany, ManyToOne } from "typeorm";
+import { Entity, OneToMany, ManyToOne, Column } from "typeorm";
 import { Entry } from "./Entry";
 import { User } from "./User";
 import { IsNotEmpty } from "class-validator";
 
 @Entity()
 export class Project extends Entry {
-  @OneToMany(type => Task, task => task.project, { cascade: true })
-  public tasks: Task[];
-
   @IsNotEmpty()
-  @ManyToOne(type => User, user => user.projects)
-  public user: User;
+  @Column({ name: "user_id" })
+  public userId: string;
 
   constructor(title: string) {
     super(title);

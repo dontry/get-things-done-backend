@@ -1,8 +1,9 @@
 import { Entry } from "./Entry";
-import { Entity, Column, ManyToOne } from "typeorm";
+import { Entity, Column } from "typeorm";
 import { IReminder, IRepeater } from "../types";
 import { Project } from "./Project";
 import { User } from "./User";
+import { IsNotEmpty } from "class-validator";
 
 @Entity()
 export class Task extends Entry {
@@ -15,11 +16,12 @@ export class Task extends Entry {
   @Column()
   public tags: string[];
 
-  @ManyToOne(type => Project, project => project.tasks)
-  public project: Project;
+  @Column({ name: "project_id" })
+  public projectId: string;
 
-  @ManyToOne(type => User, user => user.tasks)
-  public user: User;
+  @IsNotEmpty()
+  @Column({ name: "user_id" })
+  public userId: string;
 
   constructor(title: string) {
     super(title);

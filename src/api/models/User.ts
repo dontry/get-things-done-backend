@@ -61,7 +61,7 @@ export class User {
   @Validate(PasswordPattern)
   @IsNotEmpty()
   @Column()
-  @Exclude({ toPlainOnly: true })
+  @Exclude()
   public password: string;
 
   @Column(type => FullName)
@@ -75,11 +75,11 @@ export class User {
   @Column()
   public sex: Sex;
 
-  @OneToMany(type => Project, project => project.user, { cascade: true })
-  public projects: Project[];
+  // @OneToMany(type => Project, project => project.user, { cascade: true })
+  // public projects: Project[];
 
-  @OneToMany(type => Task, task => task.user, { cascade: true })
-  public tasks: Task[];
+  // @OneToMany(type => Task, task => task.user, { cascade: true })
+  // public tasks: Task[];
 
   public toString(): string {
     return `username: ${this.username},

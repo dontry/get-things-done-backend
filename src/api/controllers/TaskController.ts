@@ -1,14 +1,14 @@
-import { TaskService } from "../services";
 import {
   Get,
   Post,
   Body,
   Param,
   JsonController,
-  QueryParam,
   UseBefore,
-  Req
+  Req,
+  Put
 } from "routing-controllers";
+import { TaskService } from "../services";
 import { JwtAuthMiddleware } from "../middlewares";
 import { Task } from "../models";
 
@@ -20,13 +20,24 @@ export class TaskController {
   @Get()
   public findAll(@Req() request): Promise<Task[]> {
     const { user } = request;
-    return this.taskService.findAll(user);
+    return this.taskService.findAll(user.id);
   }
 
   @Post()
   public create(@Body() task: Task, @Req() request): Promise<Task> {
     const { user } = request;
-    task.user = user;
+    task.userId = user.id;
     return this.taskService.create(task);
+  }
+
+  @Put("/:id")
+  public update(
+    @Param("id") id: string,
+    @Body() task: Task,
+    @Req() request
+  ): Promise<Task> {
+    const { user } = request;
+    task.userId = user.id;
+    return this.taskService.update(id, task);
   }
 }
