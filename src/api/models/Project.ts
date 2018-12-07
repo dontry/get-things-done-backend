@@ -9,8 +9,4 @@ export class Project extends Entry {
   @IsNotEmpty()
   @Column({ name: "user_id" })
   public userId: string;
-
-  constructor(title: string) {
-    super(title);
-  }
 }

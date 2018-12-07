@@ -1,7 +1,16 @@
-import { Entity, ObjectIdColumn, Column, Index, ObjectID } from "typeorm";
+import {
+  Entity,
+  ObjectIdColumn,
+  Column,
+  Index,
+  ObjectID,
+  BeforeInsert,
+  BeforeUpdate
+} from "typeorm";
 import { Transform } from "class-transformer";
 import { toHexString } from "../../utils";
 import { IsNotEmpty, Min, Max } from "class-validator";
+import { isAfter } from "date-fns";
 import Note from "./Note";
 
 @Entity()
@@ -68,11 +77,19 @@ export abstract class Entry {
   @Column()
   public note: Note;
 
-  constructor(title: string) {
-    this.title = title;
-  }
-
   public toString(): string {
     return `${this.title}`;
+  }
+
+  @BeforeUpdate()
+  @BeforeInsert()
+  public validateDate(): void {
+    console.log("xxxxxxx");
+    const startAtDate = new Date(this.startAt);
+    const endAtDate = new Date(this.endAt);
+
+    if (isAfter(startAtDate, endAtDate)) {
+      throw new Error("validation error");
+    }
   }
 }
