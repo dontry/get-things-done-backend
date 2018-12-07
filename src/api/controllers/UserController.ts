@@ -8,7 +8,8 @@ import {
   JsonController,
   QueryParam,
   UseBefore,
-  Req
+  Req,
+  Delete
 } from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
@@ -50,5 +51,11 @@ export class UserController {
   public create(@Body() user: User): Promise<User> {
     logger.debug(`New user: ${JSON.stringify(user)}`);
     return this.userService.create(user);
+  }
+
+  @Delete()
+  public delete(@Req() request): Promise<void> {
+    const { user } = request;
+    return this.userService.delete(user.id);
   }
 }

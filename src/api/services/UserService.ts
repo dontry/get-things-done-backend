@@ -82,9 +82,9 @@ export class UserService {
   /**
    * delete
    */
-  public async delete(id: string): Promise<void> {
-    this.log.info("Delete a user");
-    this.userRepository.delete(id);
+  public async delete(id: ObjectID): Promise<void> {
+    this.log.info(`Delete user by Id ${id}`);
+    await this.userRepository.delete({ id });
     return;
   }
 }
