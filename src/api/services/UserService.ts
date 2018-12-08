@@ -6,6 +6,7 @@ import { ObjectID } from "typeorm";
 import { validate } from "class-validator";
 import { Logger } from "../../decorators";
 import { ILogger } from "../../utils";
+import _ from "lodash";
 
 @Service()
 export class UserService {
@@ -82,9 +83,10 @@ export class UserService {
   /**
    * delete
    */
-  public async delete(id: ObjectID): Promise<void> {
+  public async deleteById(id: ObjectID): Promise<boolean> {
     this.log.info(`Delete user by Id ${id}`);
-    await this.userRepository.delete({ id });
-    return;
+    await this.userRepository.deleteById(id);
+    const user = await this.userRepository.findOne(id);
+    return _.isEmpty(user);
   }
 }

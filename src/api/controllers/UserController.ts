@@ -54,8 +54,8 @@ export class UserController {
   }
 
   @Delete()
-  public delete(@Req() request): Promise<void> {
+  public delete(@Req() request): Promise<boolean> {
     const { user } = request;
-    return this.userService.delete(user.id);
+    return this.userService.deleteById(user.id);
   }
 }

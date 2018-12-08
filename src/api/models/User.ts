@@ -61,7 +61,7 @@ export class User {
   @Validate(PasswordPattern)
   @IsNotEmpty()
   @Column()
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   public password: string;
 
   @Column(type => FullName)
@@ -72,7 +72,7 @@ export class User {
   @Column({ default: -1 })
   public age: number | undefined;
 
-  @Column()
+  @Column({ name: "xxxxxx" })
   public sex: Sex;
 
   // @OneToMany(type => Project, project => project.user, { cascade: true })

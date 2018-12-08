@@ -1,8 +1,6 @@
 import { Entry } from "./Entry";
-import { Entity, Column } from "typeorm";
+import { Entity, Column, ObjectID } from "typeorm";
 import { IReminder, IRepeater } from "../types";
-import { Project } from "./Project";
-import { User } from "./User";
 import { IsNotEmpty } from "class-validator";
 
 @Entity()
@@ -16,10 +14,10 @@ export class Task extends Entry {
   @Column()
   public tags: string[];
 
-  @Column({ name: "project_id" })
-  public projectId: string;
+  @Column()
+  public projectId: string | ObjectID;
 
   @IsNotEmpty()
-  @Column({ name: "user_id" })
-  public userId: string;
+  @Column()
+  public userId: string | ObjectID;
 }

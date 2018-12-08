@@ -84,7 +84,6 @@ export abstract class Entry {
   @BeforeUpdate()
   @BeforeInsert()
   public validateDate(): void {
-    console.log("xxxxxxx");
     const startAtDate = new Date(this.startAt);
     const endAtDate = new Date(this.endAt);
 
