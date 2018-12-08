@@ -45,7 +45,7 @@ export class User {
   @Transform((id: any) => {
     return toHexString(id.id);
   })
-  public id: ObjectID;
+  public id: string | ObjectID;
 
   // Unique column: https://github.com/typeorm/typeorm/issues/2034
   @Index({ unique: true })
@@ -72,7 +72,7 @@ export class User {
   @Column({ default: -1 })
   public age: number | undefined;
 
-  @Column({ name: "xxxxxx" })
+  @Column()
   public sex: Sex;
 
   // @OneToMany(type => Project, project => project.user, { cascade: true })

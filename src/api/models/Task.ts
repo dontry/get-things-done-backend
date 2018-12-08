@@ -20,4 +20,12 @@ export class Task extends Entry {
   @IsNotEmpty()
   @Column()
   public userId: string | ObjectID;
+
+  public create(title: string, userId: string | ObjectID, now?: number) {
+    this.title = title;
+    this.userId = userId;
+    if (now) {
+      this.now = now;
+    }
+  }
 }

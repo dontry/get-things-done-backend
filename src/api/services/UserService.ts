@@ -74,9 +74,9 @@ export class UserService {
   /**
    * update
    */
-  public update(id: string, user: User): Promise<User> {
+  public update(id: string | ObjectID, user: User): Promise<User> {
     this.log.info("Update a user");
-    user.id = new ObjectID(id);
+    user.id = id;
     return this.userRepository.save(user);
   }
 
