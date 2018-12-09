@@ -88,7 +88,7 @@ export abstract class Entry {
     const endAtDate = new Date(this.endAt);
 
     if (isAfter(startAtDate, endAtDate)) {
-      throw new Error("validation error");
+      throw new Error("Validation error: startAt should be prior to endAt");
     }
   }
 }

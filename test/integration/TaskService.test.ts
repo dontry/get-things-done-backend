@@ -13,20 +13,38 @@ describe("Task service", () => {
   const endAt = Date.now() + 3000;
 
   let connection: Connection;
+  let taskService: TaskService;
   beforeAll(async () => {
     connection = await createDatabaseConnection();
+    taskService = Container.get<TaskService>(TaskService);
   });
+
   afterAll(() => {
     connection.getMongoRepository(Task).clear();
     closeDatabase(connection);
   });
 
-  test("should create a new task in the database", async done => {
+  it("should create a new task in the database", async done => {
     const task = new Task();
     task.create(title, userId, now);
-    const taskService = Container.get<TaskService>(TaskService);
     const actual = await taskService.create(task);
     expect(actual.title).toBe(task.title);
     done();
+  });
+
+  it("should fail to create a new task due to invalid date", async done => {
+    const task = new Task();
+    task.create(title, userId, now);
+    task.startAt = endAt;
+    task.endAt = startAt;
+    try {
+      await taskService.create(task);
+    } catch (e) {
+      expect(e).toBeTruthy();
+      expect(e.message).toBe(
+        "Validation error: startAt should be prior to endAt"
+      );
+      done();
+    }
   });
 });
