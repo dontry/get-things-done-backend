@@ -28,7 +28,7 @@ export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
     response.status(error.httpCode || 500);
     response.json({
       name: error.name,
-      message: error.message,
+      message: error.message || "Server errors",
       errors: error[`errors`] || []
     });
 
