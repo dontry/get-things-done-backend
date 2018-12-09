@@ -72,7 +72,7 @@
     "build": "tsc",
     "start": "npm run serve",
     "test": "swagger project test",
-    "jest": "jest --forceExit --coverage --verbose",
+    "jest": "jest  --coverage --verbose --detectOpenHandles",
     "watch-node": "nodemon dist/src/index.js",
     "watch": "nodemon dist/",
     "dev": "ts-node  --inspect-brk=5858 src/index.ts",
