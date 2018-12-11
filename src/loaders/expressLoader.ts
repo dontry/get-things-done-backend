@@ -10,11 +10,7 @@ import {
   AuthController,
   TaskController
 } from "../api/controllers";
-import {
-  LoggingMiddleware,
-  ErrorHandlerMiddleware,
-  ResponseHandlerMiddleware
-} from "../api/middlewares";
+import { LoggingMiddleware, ErrorHandlerMiddleware } from "../api/middlewares";
 import { logger } from "../utils";
 import { Passport } from "../auth";
 
@@ -39,17 +35,13 @@ export const expressLoader: MicroframeworkLoader = (
         AuthController,
         TaskController
       ],
-      middlewares: [
-        LoggingMiddleware,
-        ErrorHandlerMiddleware,
-        ResponseHandlerMiddleware
-      ]
+      middlewares: [LoggingMiddleware, ErrorHandlerMiddleware]
     });
 
     // Authentication
 
     expressApp.listen(10010, () => {
-      logger.info(`Express is running`);
+      logger.info(`Express is running at port 10010`);
     });
     settings.setData("express_app", expressApp);
   }
