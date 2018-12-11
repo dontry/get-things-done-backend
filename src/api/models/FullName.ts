@@ -1,4 +1,4 @@
-import { Entity, Column } from "typeorm";
+import { Column } from "typeorm";
 import { IsNotEmpty } from "class-validator";
 
 class FullName {

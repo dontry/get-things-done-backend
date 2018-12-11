@@ -7,9 +7,10 @@ import { createExpressServer } from "routing-controllers";
 import {
   HelloWorldController,
   UserController,
-  AuthController
+  AuthController,
+  TaskController
 } from "../api/controllers";
-import { LoggingMiddleware } from "../api/middlewares";
+import { LoggingMiddleware, ErrorHandlerMiddleware } from "../api/middlewares";
 import { logger } from "../utils";
 import { Passport } from "../auth";
 
@@ -27,15 +28,20 @@ export const expressLoader: MicroframeworkLoader = (
       cors: true,
       classTransformer: true,
       routePrefix: "/v1",
-      // defaultErrorHandler: false,
-      controllers: [HelloWorldController, UserController, AuthController],
-      middlewares: [LoggingMiddleware]
+      defaultErrorHandler: false,
+      controllers: [
+        HelloWorldController,
+        UserController,
+        AuthController,
+        TaskController
+      ],
+      middlewares: [LoggingMiddleware, ErrorHandlerMiddleware]
     });
 
     // Authentication
 
     expressApp.listen(10010, () => {
-      logger.info(`Express is running`);
+      logger.info(`Express is running at port 10010`);
     });
     settings.setData("express_app", expressApp);
   }

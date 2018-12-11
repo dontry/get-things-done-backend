@@ -10,11 +10,14 @@ import {
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { Passport } from "../../auth";
+import { UserService } from "../services";
 import { classToPlain } from "class-transformer";
+import { User } from "../models";
+import { logger } from "../../utils";
 
 @JsonController("/auth")
 export class AuthController {
-  constructor() {
+  constructor(private userService: UserService) {
     Passport.useLocalStrategy();
     Passport.useJWTStrategy();
   }
@@ -42,5 +45,12 @@ export class AuthController {
         }
       )(request, response);
     });
+  }
+
+  @Post("/register")
+  @OnUndefined(200)
+  public register(@Body() user: User): Promise<User> {
+    logger.debug(`New user: ${JSON.stringify(user)}`);
+    return this.userService.create(user);
   }
 }

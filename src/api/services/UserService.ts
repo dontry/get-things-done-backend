@@ -6,6 +6,7 @@ import { ObjectID } from "typeorm";
 import { validate } from "class-validator";
 import { Logger } from "../../decorators";
 import { ILogger } from "../../utils";
+import _ from "lodash";
 
 @Service()
 export class UserService {
@@ -73,18 +74,19 @@ export class UserService {
   /**
    * update
    */
-  public update(id: string, user: User): Promise<User> {
+  public update(id: string | ObjectID, user: User): Promise<User> {
     this.log.info("Update a user");
-    user.id = new ObjectID(id);
+    user.id = id;
     return this.userRepository.save(user);
   }
 
   /**
    * delete
    */
-  public async delete(id: string): Promise<void> {
-    this.log.info("Delete a user");
-    this.userRepository.delete(id);
-    return;
+  public async deleteById(id: ObjectID): Promise<boolean> {
+    this.log.info(`Delete user by Id ${id}`);
+    await this.userRepository.deleteById(id);
+    const user = await this.userRepository.findOne(id);
+    return _.isEmpty(user);
   }
 }
