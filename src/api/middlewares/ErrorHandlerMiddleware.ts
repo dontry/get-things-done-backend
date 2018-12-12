@@ -7,7 +7,7 @@ import {
 import { Logger } from "../../decorators";
 import { ILogger } from "../../utils";
 
-@Middleware({ type: "after", priority: 5 })
+// @Middleware({ type: "after", priority: 5 })
 export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
   public isProduction = process.env.ENV_NODE === "production";
   constructor(@Logger() private log: ILogger) {}
@@ -21,15 +21,14 @@ export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
     response: Response,
     next: NextFunction
   ) {
-    this.log.debug(`error ${error}`);
     if (!error.httpCode) {
       next();
     }
     response.status(error.httpCode || 500);
     response.json({
       name: error.name,
-      message: error.message || "Server errors",
-      errors: error[`errors`] || []
+      message: error.message.toString() || "Server errors",
+      errors: error[`errors`]
     });
 
     if (this.isProduction) {
