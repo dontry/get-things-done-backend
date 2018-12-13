@@ -10,7 +10,11 @@ import {
   AuthController,
   TaskController
 } from "../api/controllers";
-import { LoggingMiddleware, ErrorHandlerMiddleware } from "../api/middlewares";
+import {
+  LoggingMiddleware,
+  ErrorHandlerMiddleware,
+  NoCacheMiddleware
+} from "../api/middlewares";
 import { logger } from "../utils";
 import { Passport } from "../auth";
 
@@ -35,7 +39,12 @@ export const expressLoader: MicroframeworkLoader = (
         AuthController,
         TaskController
       ],
-      middlewares: [LoggingMiddleware, ErrorHandlerMiddleware]
+      middlewares: [
+        LoggingMiddleware,
+        ErrorHandlerMiddleware,
+        NoCacheMiddleware,
+        SecurityHstsMiddleware
+      ]
     });
 
     // Authentication
