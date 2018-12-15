@@ -42,8 +42,7 @@ export const expressLoader: MicroframeworkLoader = (
       middlewares: [
         LoggingMiddleware,
         ErrorHandlerMiddleware,
-        NoCacheMiddleware,
-        SecurityHstsMiddleware
+        NoCacheMiddleware
       ]
     });
 

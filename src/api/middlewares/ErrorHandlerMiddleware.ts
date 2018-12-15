@@ -7,7 +7,7 @@ import {
 import { Logger } from "../../decorators";
 import { ILogger } from "../../utils";
 
-// @Middleware({ type: "after", priority: 5 })
+@Middleware({ type: "after", priority: 5 })
 export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
   public isProduction = process.env.ENV_NODE === "production";
   constructor(@Logger() private log: ILogger) {}

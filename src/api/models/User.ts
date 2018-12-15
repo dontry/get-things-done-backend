@@ -17,6 +17,7 @@ import { Sex } from "../types/Sex";
 import { toHexString } from "../../utils";
 import { Task } from "./Task";
 import { Project } from "./Project";
+import { Role } from "../types/Role";
 
 @Entity()
 @Unique(["username"])
@@ -75,6 +76,10 @@ export class User {
   @Column()
   public sex: Sex;
 
+  @Column({ default: () => "SUBSCRIBER" })
+  @Exclude({ toPlainOnly: true })
+  public role: Role;
+
   // @OneToMany(type => Project, project => project.user, { cascade: true })
   // public projects: Project[];
 
@@ -93,7 +98,8 @@ export class User {
     email: string,
     fullName?: FullName,
     age?: number,
-    sex?: Sex
+    sex?: Sex,
+    role?: Role
   ) {
     this.username = username;
     this.password = password;
@@ -107,6 +113,8 @@ export class User {
     if (sex) {
       this.sex = sex;
     }
+
+    this.role = role || "SUBSCRIBER";
   }
 
   @BeforeInsert()

@@ -72,6 +72,23 @@ export class UserService {
   }
 
   /**
+   * register
+   */
+  public register(user: User): Promise<User> {
+    this.log.info(`Register a new subscriber => ${user.toString()}`);
+    user.role = "SUBSCRIBER";
+    return new Promise((resolve, reject) => {
+      validate(user).then(errors => {
+        if (errors.length > 0) {
+          reject(errors);
+        } else {
+          resolve(this.userRepository.save(user));
+        }
+      });
+    });
+  }
+
+  /**
    * update
    */
   public update(id: string | ObjectID, user: User): Promise<User> {

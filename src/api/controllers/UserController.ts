@@ -14,9 +14,11 @@ import {
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { logger } from "../../utils";
-import { JwtAuthMiddleware } from "../middlewares";
+import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
 
 // @UseBefore(LocalAuthMiddleware)
+
+@UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
 @JsonController("/users")
 export class UserController {

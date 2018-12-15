@@ -5,6 +5,7 @@ import {
 import { Container } from "typedi";
 import { useContainer as routingUseContainer } from "routing-controllers";
 import { useContainer as ormUseContainer } from "typeorm";
+import { Authorizer } from "../auth";
 import { logger } from "../utils";
 
 export const iocLoader: MicroframeworkLoader = (
@@ -13,4 +14,6 @@ export const iocLoader: MicroframeworkLoader = (
   logger.debug("iocLoader is loaded");
   routingUseContainer(Container);
   ormUseContainer(Container);
+  const authorizer = Container.get(Authorizer);
+  authorizer.initialize();
 };

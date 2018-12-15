@@ -9,9 +9,10 @@ import {
   Put
 } from "routing-controllers";
 import { TaskService } from "../services";
-import { JwtAuthMiddleware } from "../middlewares";
+import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
 import { Task } from "../models";
 
+@UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
 @JsonController("/tasks")
 export class TaskController {
