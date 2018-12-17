@@ -1,5 +1,5 @@
 import { Container } from "typedi";
-import { logger } from "../utils";
+import { logger } from "src/utils";
 import { string } from "joi";
 
 // TODO: scope

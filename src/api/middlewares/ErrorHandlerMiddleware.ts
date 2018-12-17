@@ -4,8 +4,8 @@ import {
   Middleware,
   HttpError
 } from "routing-controllers";
-import { Logger } from "../../decorators";
-import { ILogger } from "../../utils";
+import { Logger } from "src/decorators";
+import { ILogger } from "src/utils";
 
 @Middleware({ type: "after", priority: 5 })
 export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {

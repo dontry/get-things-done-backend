@@ -18,7 +18,7 @@ import { PassportMiddleware } from "../middlewares/PassportMiddlewares/PassportM
 import {
   JwtAuthMiddleware,
   AuthorizationMiddleware
-} from "../../api/middlewares";
+} from "src/api/middlewares";
 
 @JsonController("/auth")
 export class AuthController {

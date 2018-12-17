@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import { Middleware, ExpressMiddlewareInterface } from "routing-controllers";
-import { logger } from "../../utils";
+import { logger } from "src/utils";
 
 @Middleware({ type: "before" })
 export class LoggingMiddleware implements ExpressMiddlewareInterface {

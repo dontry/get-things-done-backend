@@ -14,7 +14,7 @@ import {
 } from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
-import { logger } from "../../utils";
+import { logger } from "src/utils";
 import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
 
 @UseBefore(AuthorizationMiddleware)
