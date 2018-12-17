@@ -17,7 +17,7 @@ export class UserRepository extends MongoRepository<User> {
     super();
   }
 
-  public async deleteById(id: ObjectID): Promise<void> {
+  public async deleteById(id: string | ObjectID): Promise<void> {
     await this.entityManager.deleteMany(Task, { userId: id });
     await this.entityManager.deleteMany(Project, { userId: id });
     await this.delete({ id });

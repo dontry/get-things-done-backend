@@ -9,14 +9,13 @@ import {
   QueryParam,
   UseBefore,
   Req,
-  Delete
+  Delete,
+  Put
 } from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { logger } from "../../utils";
 import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
-
-// @UseBefore(LocalAuthMiddleware)
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
@@ -36,6 +35,17 @@ export class UserController {
     return this.userService.findById(id);
   }
 
+  @Delete("/:id")
+  public delete(@Param("id") id: string): Promise<boolean> {
+    return this.userService.deleteById(id);
+  }
+
+  @Put("/:id")
+  public changeRole(@Param("id") id: string, @Body() body): Promise<any> {
+    const { role } = body;
+    return this.userService.changeRole(id, role);
+  }
+
   @Get()
   public findAll(@Req() request): Promise<User[]> {
     logger.debug(`request user: ${request.user}`);
@@ -53,11 +63,5 @@ export class UserController {
   public create(@Body() user: User): Promise<User> {
     logger.debug(`New user: ${JSON.stringify(user)}`);
     return this.userService.create(user);
-  }
-
-  @Delete()
-  public delete(@Req() request): Promise<boolean> {
-    const { user } = request;
-    return this.userService.deleteById(user.id);
   }
 }

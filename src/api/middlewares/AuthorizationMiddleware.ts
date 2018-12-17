@@ -39,7 +39,11 @@ export class AuthorizationMiddleware implements ExpressMiddlewareInterface {
           if (authorized) {
             next();
           } else {
-            return next(new ForbiddenError("User permission denied"));
+            return next(
+              new ForbiddenError(
+                `User permission denied. You are not allowed to access ${path}`
+              )
+            );
           }
         } else {
           return next(new ForbiddenError("User permission denied"));

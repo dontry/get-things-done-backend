@@ -1,10 +1,12 @@
 import {
   Post,
+  Delete,
   JsonController,
   Res,
   Req,
   Body,
   OnUndefined,
+  Put,
   UseBefore
 } from "routing-controllers";
 import jwt from "jsonwebtoken";
@@ -12,7 +14,11 @@ import passport from "passport";
 import { UserService } from "../services";
 import { classToPlain } from "class-transformer";
 import { User } from "../models";
-import { logger } from "../../utils";
+import { PassportMiddleware } from "../middlewares/PassportMiddlewares/PassportMiddleware";
+import {
+  JwtAuthMiddleware,
+  AuthorizationMiddleware
+} from "../../api/middlewares";
 
 @JsonController("/auth")
 export class AuthController {
@@ -47,5 +53,21 @@ export class AuthController {
   @OnUndefined(200)
   public register(@Body() user: User): Promise<User> {
     return this.userService.register(user);
+  }
+
+  @UseBefore(AuthorizationMiddleware)
+  @UseBefore(JwtAuthMiddleware)
+  @Delete("/unsubscribe")
+  public unsubscribe(@Req() request): Promise<boolean> {
+    const { user } = request;
+    return this.userService.deleteById(user.id);
+  }
+
+  @UseBefore(AuthorizationMiddleware)
+  @UseBefore(JwtAuthMiddleware)
+  @Put("/update")
+  public update(@Req() request, @Body() info: User): Promise<User> {
+    const { user } = request;
+    return this.userService.update(user.id, info);
   }
 }

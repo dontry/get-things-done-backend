@@ -7,6 +7,8 @@ import { validate } from "class-validator";
 import { Logger } from "../../decorators";
 import { ILogger } from "../../utils";
 import _ from "lodash";
+import { Role } from "../types/Role";
+import { UserNotFoundError } from "../errors";
 
 @Service()
 export class UserService {
@@ -49,7 +51,7 @@ export class UserService {
   /**
    * findOne
    */
-  public findById(id: string): Promise<User | undefined> {
+  public findById(id: string | ObjectID): Promise<User | undefined> {
     this.log.info(`Find one user with id ${id}`);
     return this.userRepository.findOne(id);
   }
@@ -98,9 +100,23 @@ export class UserService {
   }
 
   /**
+   * change user role
+   */
+  public async changeRole(id: string | ObjectID, role: Role): Promise<any> {
+    const user = await this.findById(id);
+    if (user) {
+      user.role = role;
+      await this.userRepository.save(user);
+      return true;
+    } else {
+      return new UserNotFoundError();
+    }
+  }
+
+  /**
    * delete
    */
-  public async deleteById(id: ObjectID): Promise<boolean> {
+  public async deleteById(id: string | ObjectID): Promise<boolean> {
     this.log.info(`Delete user by Id ${id}`);
     await this.userRepository.deleteById(id);
     const user = await this.userRepository.findOne(id);
