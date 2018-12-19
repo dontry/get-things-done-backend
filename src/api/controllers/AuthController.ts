@@ -14,11 +14,10 @@ import passport from "passport";
 import { UserService } from "../services";
 import { classToPlain } from "class-transformer";
 import { User } from "../models";
-import { PassportMiddleware } from "../middlewares/PassportMiddlewares/PassportMiddleware";
 import {
   JwtAuthMiddleware,
   AuthorizationMiddleware
-} from "src/api/middlewares";
+} from "../../api/middlewares";
 
 @JsonController("/auth")
 export class AuthController {
@@ -66,7 +65,7 @@ export class AuthController {
   @UseBefore(AuthorizationMiddleware)
   @UseBefore(JwtAuthMiddleware)
   @Put("/update")
-  public update(@Req() request, @Body() info: User): Promise<User> {
+  public update(@Req() request, @Body() info: User): Promise<User | void> {
     const { user } = request;
     return this.userService.update(user.id, info);
   }

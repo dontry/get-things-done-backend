@@ -1,6 +1,5 @@
 import { Container } from "typedi";
-import { logger } from "src/utils";
-import { string } from "joi";
+import { logger } from "../utils";
 
 // TODO: scope
 export const Logger = (scope?: string): any => {

@@ -7,7 +7,7 @@ import { InjectManager } from "typeorm-typedi-extensions";
 import { MongoEntityManager } from "typeorm";
 import { User } from "../models/User";
 import { Inject } from "typedi";
-import { Authorizer } from "src/auth";
+import { Authorizer } from "../../auth";
 
 export class AuthorizationMiddleware implements ExpressMiddlewareInterface {
   @Inject()

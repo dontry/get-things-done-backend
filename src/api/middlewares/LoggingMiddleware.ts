@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import { Middleware, ExpressMiddlewareInterface } from "routing-controllers";
-import { logger } from "src/utils";
+import { logger } from "../../utils";
 
 @Middleware({ type: "before" })
 export class LoggingMiddleware implements ExpressMiddlewareInterface {
   public use(request: Request, response: Response, next: NextFunction) {
-    return morgan("combine", {
+    return morgan("combined", {
       stream: {
-        write: logger.info.bind(logger)
+        write: meta => logger.info(meta)
       }
     })(request, response, next);
   }
