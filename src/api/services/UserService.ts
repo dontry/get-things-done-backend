@@ -9,6 +9,7 @@ import { ILogger } from "../../utils";
 import _ from "lodash";
 import { Role } from "../types/Role";
 import { UserNotFoundError } from "../errors";
+import { ModelValidationError } from "../errors/ModelValidationError";
 
 @Service()
 export class UserService {
@@ -63,7 +64,7 @@ export class UserService {
     this.log.info(`Create a new user => ${user.toString()}`);
     const errors = await validate(user, { whitelist: true });
     if (errors.length > 0) {
-      throw errors;
+      throw new ModelValidationError(errors);
     }
     return this.userRepository.save(user);
     // this.eventDispatcher.dispatch(events.user.created, newUser);
@@ -77,7 +78,7 @@ export class UserService {
     user.role = Role.SUBSCRIBER;
     const errors = await validate(user, { whitelist: true });
     if (errors.length > 0) {
-      throw errors;
+      throw new ModelValidationError(errors);
     }
     return this.userRepository.save(user);
   }
@@ -93,7 +94,7 @@ export class UserService {
       user.role = oldUser.role;
       const errors = await validate(user, { whitelist: true });
       if (errors.length > 0) {
-        throw errors;
+        throw new ModelValidationError(errors);
       }
       return this.userRepository.save(user);
     } else {
@@ -113,7 +114,7 @@ export class UserService {
       user.role = role;
       const errors = await validate(user, { whitelist: true });
       if (errors.length > 0) {
-        throw errors;
+        throw new ModelValidationError(errors);
       }
       const newUser = await this.userRepository.save(user);
       return newUser.role;

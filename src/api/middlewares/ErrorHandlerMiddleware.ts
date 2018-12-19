@@ -4,8 +4,9 @@ import {
   Middleware,
   HttpError
 } from "routing-controllers";
-import { Logger } from "src/decorators";
-import { ILogger } from "src/utils";
+import { Logger } from "../../decorators";
+import { ILogger } from "../../utils";
+import { ValidationError } from "class-validator";
 
 @Middleware({ type: "after", priority: 5 })
 export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
@@ -21,10 +22,20 @@ export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
     response: Response,
     next: NextFunction
   ) {
-    if (!error.httpCode) {
+    if (!error) {
       next();
     }
     response.status(error.httpCode || 500);
+
+    // Validation errors
+    // if (Array.isArray(error) && error[0] instanceof ValidationError) {
+    //   response.json({
+    //     name: "ValidationError",
+    //     message: "Validation Errors",
+    //     errors: error
+    //   });
+    // }
+
     response.json({
       name: error.name,
       message: error.message.toString() || "Server errors",

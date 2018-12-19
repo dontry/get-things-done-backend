@@ -24,12 +24,13 @@ describe("User service", () => {
   beforeAll(async () => {
     connection = await createDatabaseConnection();
   });
-  afterAll(() => {
+  afterAll(async done => {
     connection.getMongoRepository(User).clear();
-    closeDatabase(connection);
+    await closeDatabase(connection);
+    done();
   });
 
-  test("should create a new user in the database", async done => {
+  it("should create a new user in the database", async done => {
     user = new User();
     user.create(username, password, email, fullName, age, sex);
     const userService = Container.get<UserService>(UserService);
@@ -42,7 +43,7 @@ describe("User service", () => {
     done();
   });
 
-  test("should update the user in the database", async done => {
+  it("should update the user in the database", async done => {
     const userService = Container.get<UserService>(UserService);
     const createdUser = await userService.findOne({
       username
