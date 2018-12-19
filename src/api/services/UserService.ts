@@ -59,57 +59,66 @@ export class UserService {
   /**
    * create
    */
-  public create(user: User): Promise<User> {
+  public async create(user: User): Promise<User> {
     this.log.info(`Create a new user => ${user.toString()}`);
-    return new Promise((resolve, reject) =>
-      validate(user).then(errors => {
-        if (errors.length > 0) {
-          reject(errors);
-        } else {
-          resolve(this.userRepository.save(user));
-        }
-      })
-    );
+    const errors = await validate(user, { whitelist: true });
+    if (errors.length > 0) {
+      throw errors;
+    }
+    return this.userRepository.save(user);
     // this.eventDispatcher.dispatch(events.user.created, newUser);
   }
 
   /**
    * register
    */
-  public register(user: User): Promise<User> {
+  public async register(user: User): Promise<User> {
     this.log.info(`Register a new subscriber => ${user.toString()}`);
-    user.role = "SUBSCRIBER";
-    return new Promise((resolve, reject) => {
-      validate(user).then(errors => {
-        if (errors.length > 0) {
-          reject(errors);
-        } else {
-          resolve(this.userRepository.save(user));
-        }
-      });
-    });
+    user.role = Role.SUBSCRIBER;
+    const errors = await validate(user, { whitelist: true });
+    if (errors.length > 0) {
+      throw errors;
+    }
+    return this.userRepository.save(user);
   }
 
   /**
    * update
    */
-  public update(id: string | ObjectID, user: User): Promise<User> {
+  public async update(id: string | ObjectID, user: User): Promise<User | void> {
     this.log.info("Update a user");
-    user.id = id;
-    return this.userRepository.save(user);
+    const oldUser = await this.userRepository.findOne(id);
+    if (oldUser) {
+      user.id = oldUser.id;
+      user.role = oldUser.role;
+      const errors = await validate(user, { whitelist: true });
+      if (errors.length > 0) {
+        throw errors;
+      }
+      return this.userRepository.save(user);
+    } else {
+      throw new UserNotFoundError();
+    }
   }
 
   /**
    * change user role
    */
-  public async changeRole(id: string | ObjectID, role: Role): Promise<any> {
+  public async changeRole(
+    id: string | ObjectID,
+    role: Role
+  ): Promise<string | void> {
     const user = await this.findById(id);
     if (user) {
       user.role = role;
-      await this.userRepository.save(user);
-      return true;
+      const errors = await validate(user, { whitelist: true });
+      if (errors.length > 0) {
+        throw errors;
+      }
+      const newUser = await this.userRepository.save(user);
+      return newUser.role;
     } else {
-      return new UserNotFoundError();
+      throw new UserNotFoundError();
     }
   }
 
