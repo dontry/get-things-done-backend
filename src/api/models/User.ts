@@ -1,5 +1,13 @@
 import * as bcrypt from "bcrypt";
-import { IsNotEmpty, Min, IsInt, IsEmail, Validate } from "class-validator";
+import {
+  IsNotEmpty,
+  Min,
+  IsInt,
+  IsEmail,
+  Validate,
+  IsString,
+  IsEnum
+} from "class-validator";
 import {
   Entity,
   ObjectIdColumn,
@@ -69,14 +77,16 @@ export class User {
   public fullName: FullName;
 
   @IsInt()
-  @Min(10, { message: "The use is too young to get registered" })
+  @Min(10, { message: "The user is too young to get registered" })
   @Column({ default: -1 })
   public age: number | undefined;
 
+  @IsEnum(Sex)
   @Column()
   public sex: Sex;
 
-  @Column({ default: () => "SUBSCRIBER" })
+  @Column({ default: () => Role.SUBSCRIBER })
+  @IsEnum(Role)
   @Exclude({ toPlainOnly: true })
   public role: Role;
 
@@ -114,7 +124,7 @@ export class User {
       this.sex = sex;
     }
 
-    this.role = role || "SUBSCRIBER";
+    this.role = role || Role.SUBSCRIBER;
   }
 
   @BeforeInsert()
