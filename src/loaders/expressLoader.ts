@@ -15,8 +15,10 @@ import {
   ErrorHandlerMiddleware,
   NoCacheMiddleware
 } from "../api/middlewares";
-import { logger } from "../utils";
 import { Passport } from "../auth";
+import { logger } from "../utils";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../swagger/swagger.json";
 
 export const expressLoader: MicroframeworkLoader = (
   settings: MicroframeworkSettings | undefined
@@ -46,7 +48,13 @@ export const expressLoader: MicroframeworkLoader = (
       ]
     });
 
-    // Authentication
+    expressApp.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument, {
+        explorer: true
+      })
+    );
 
     expressApp.listen(10010, () => {
       logger.info(`Express is running at port 10010`);
