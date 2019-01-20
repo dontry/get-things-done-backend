@@ -162,6 +162,8 @@ paths:
     delete:
       description: Delete a user by id
       operationId: delete
+      security:
+        - Bearer: []
       produces:
         - application/json
       parameters:
@@ -179,14 +181,16 @@ paths:
     get:
       description: return all todos
       operationId: getTasks
+      security:
+        - Bearer: []
       produces:
         - application/json
-      parameters:
-        - name: user_id
-          in: query
-          description: "User id of the tasks"
-          required: true
-          type: string
+      # parameters:
+      #   - name: user_id
+      #     in: query
+      #     description: "User id of the tasks"
+      #     required: true
+      #     type: string
       responses:
         200:
           description: Get tasks by user id
