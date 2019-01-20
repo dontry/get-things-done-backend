@@ -12,3 +12,15 @@ tsc --init
 ```sh
 ./node_modules/.bin/tslint --init
 ```
+
+## Swagger API
+
+```sh
+yarn edit
+```
+
+```sh
+yarn swagger-test
+```
+
+[Authorization Bearer](https://swagger.io/docs/specification/authentication/bearer-authentication/)

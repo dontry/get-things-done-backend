@@ -1,0 +1,197 @@
+swagger: 3.0.0
+info:
+  version: 0.0.1
+  title: Get Things Done App
+paths:
+  /v1/hello:
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      operationId: getHello
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HelloWorldResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/users:
+    x-swagger-router-controller: users
+    get:
+      description: Returns all users
+      operationId: getUsers
+      responses:
+        "200":
+          description: Success
+    post:
+      description: Create a user
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddUserResponse"
+        description: The user to be added
+        required: true
+      responses:
+        "200":
+          description: Get user success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  "/v1/users/{id}":
+    x-swagger-router-controller: users
+    get:
+      description: Return a user by id
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          description: The id of ther user
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      description: Update a user by id
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: Id of the user being updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        description: The updated user object
+        required: true
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateUserResponse"
+        "400":
+          description: Yikes! An error!
+    delete:
+      description: Delete a user by id
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteUserResponse"
+  /v1/tasks:
+    x-swagger-router-controller: task
+    get:
+      description: return all todos
+      operationId: getTasks
+      parameters:
+        - name: user_id
+          in: query
+          description: User id of the tasks
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Get tasks by user id
+  /swagger:
+    x-swagger-pipe: swagger_raw
+servers:
+  - url: http://localhost:10010/
+  - url: https://localhost:10010/
+components:
+  schemas:
+    HelloWorldResponse:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ErrorResponse:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User id
+        username:
+          type: string
+          description: Username
+        firstname:
+          type: string
+          description: User's first name
+        lastname:
+          type: string
+          description: User's last name
+        age:
+          type: number
+          description: User's age
+    AddUserResponse:
+      type: object
+      description: It returns a created user object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+        messge:
+          type: string
+    UpdateUserResponse:
+      type: object
+      required:
+        - message
+        - data
+      description: It returns a updated user object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+        message:
+          type: string
+    DeleteUserResponse:
+      required:
+        - message
+        - id
+      description: It returns a delete user id
+      properties:
+        message:
+          type: string
+        id:
+          type: number

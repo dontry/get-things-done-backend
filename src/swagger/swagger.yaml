@@ -6,11 +6,16 @@ info:
 host: localhost:10010
 # basePath prefixes all resource paths
 basePath: /
-#
+# define components
 schemes:
   # tip: remove http to make production-grade
   - http
   - https
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name:  Authorization
+    in: header
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
@@ -42,15 +47,54 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /v1/auth/login:
+    x-swagger-router-controller: AuthController
+    post:
+      description:  User login
+      operationId: login
+      produces:
+        - "application/json"
+      parameters:
+        - name: credential
+          in: body
+          description: User's username
+          required: true
+          schema:
+            $ref: "#/definitions/Credential"
+      responses:
+        200:
+          description: "Login sucess"
+  /v1/auth/register:
+    x-swagger-router-controller: AuthController
+    post:
+      description: User login
+      operationId: register
+      produces:
+        - "application/json"
+      parameters:
+        - name: registration info
+          in: body
+          description: User's registration info
+          required: true
+          schema:
+            $ref: "#/definitions/RegistrationInfo"
+      responses:
+        200:
+          description: "Register success"
+        
   /v1/users:
     x-swagger-router-controller: users
     get:
       description: Returns all users
       operationId: getUsers
+      security:
+        - Bearer: []
       parameters: []
       responses:
         200:
           description: Success
+        401:
+          description: No authorization token
     post:
       description: Create a user
       operationId: addUser
@@ -68,11 +112,14 @@ paths:
           description: "Get user success"
           schema:
             $ref: "#/definitions/User"
+ 
   /v1/users/{id}:
-    x-swagger-router-controller: users
+    x-swagger-router-controller: UserController
     get:
       description: Return a user by id
       operationId: getUser
+      security:
+        - Bearer: []
       produces:
         - "application/json"
       parameters:
@@ -89,6 +136,8 @@ paths:
     put:
       description: Update a user by id
       operationId: updateUser
+      security:
+        - Bearer: []
       produces:
         - application/json
       parameters:
@@ -166,22 +215,42 @@ definitions:
       username:
         type: string
         description: Username
-      firstname:
-        type: string
-        description: User's first name
-      lastname:
-        type: string
-        description: User's last name
+      name:
+        $ref: "#/definitions/FullName"
       age:
         type: number
         description: User's age
+  Credential:
+    type: object
+    properties:
+      username:
+        type: string
+        description: User's username
+      password:
+        type: string
+        description: User's password(should be hashed)
+  RegistrationInfo: 
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      email:
+        type: string
+      age:
+        type: number
+      name:
+        $ref: "#/definitions/FullName"
+      sex:
+        type: string
   AddUserResponse:
     type: object
     description: It returns a created user object
     properties:
       data:
         $ref: "#/definitions/User"
-      messge:
+      message:
         type: string
   UpdateUserResponse:
     type: object
@@ -204,3 +273,10 @@ definitions:
         type: string
       id:
         type: number
+  FullName:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
