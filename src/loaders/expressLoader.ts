@@ -18,7 +18,7 @@ import {
 import { Passport } from "../auth";
 import { logger } from "../utils";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger/swagger.json";
+import { yamlConverter } from "../utils";
 
 export const expressLoader: MicroframeworkLoader = (
   settings: MicroframeworkSettings | undefined
@@ -48,10 +48,12 @@ export const expressLoader: MicroframeworkLoader = (
       ]
     });
 
+    // Swagger api, read yaml file
+    const swaggerDoc = yamlConverter("../swagger/swagger.yaml");
     expressApp.use(
       "/api-docs",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument, {
+      swaggerUi.setup(swaggerDoc, {
         explorer: true
       })
     );

@@ -1,4 +1,5 @@
 export { logger, ILogger } from "./logger";
+export { yamlConverter } from "./yamlConverter";
 
 // should return a 24  hex characters;
 export const toHexString = (obj: object): string => {
