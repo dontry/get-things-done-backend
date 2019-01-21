@@ -41,7 +41,10 @@ export class AuthController {
             });
           }
 
-          const token = jwt.sign(classToPlain(user), "token");
+          // token = jwt.sign(payload, privateKEY, signOptions);
+          const token = jwt.sign(classToPlain(user), "token", {
+            expiresIn: "30d"
+          });
           return res({ user, token });
         }
       )(request, response);
