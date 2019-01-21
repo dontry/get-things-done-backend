@@ -49,14 +49,16 @@ export const expressLoader: MicroframeworkLoader = (
     });
 
     // Swagger api, read yaml file
-    const swaggerDoc = yamlConverter("../swagger/swagger.yaml");
-    expressApp.use(
-      "/api-docs",
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDoc, {
-        explorer: true
-      })
-    );
+    if (process.env.NODE_ENV !== "production") {
+      const swaggerDoc = yamlConverter("src/swagger/swagger.yaml");
+      expressApp.use(
+        "/api-docs",
+        swaggerUi.serve,
+        swaggerUi.setup(swaggerDoc, {
+          explorer: true
+        })
+      );
+    }
 
     expressApp.listen(10010, () => {
       logger.info(`Express is running at port 10010`);
