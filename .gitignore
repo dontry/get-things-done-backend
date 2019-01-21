@@ -88,3 +88,7 @@ typings/
 
 # next.js build output
 .next
+
+# secret key
+private.key
+public.key
