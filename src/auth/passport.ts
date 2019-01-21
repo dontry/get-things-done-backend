@@ -5,6 +5,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { UserService } from "../api/services";
 import { User } from "../api/models";
 import { Strategy } from "passport-strategy";
+import { PUBLIC_KEY } from "./index";
 
 export class Passport {
   /**
@@ -24,7 +25,7 @@ export class Passport {
           }
           return done(null, false);
         } catch (error) {
-          return done(error);
+          return done(error.message);
         }
       })
     );
@@ -36,7 +37,8 @@ export class Passport {
   public static useJWTStrategy(): void {
     const opts = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "token"
+      secretOrKey: PUBLIC_KEY,
+      algorithms: ["RS256"]
     };
     const userService: UserService = Container.get(UserService);
     passport.use(
