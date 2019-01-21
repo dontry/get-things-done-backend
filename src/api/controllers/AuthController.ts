@@ -18,6 +18,7 @@ import {
   JwtAuthMiddleware,
   AuthorizationMiddleware
 } from "../../api/middlewares";
+import { PRIVATE_KEY } from "../../auth";
 
 @JsonController("/auth")
 export class AuthController {
@@ -42,8 +43,9 @@ export class AuthController {
           }
 
           // token = jwt.sign(payload, privateKEY, signOptions);
-          const token = jwt.sign(classToPlain(user), "token", {
-            expiresIn: "30d"
+          const token = jwt.sign(classToPlain(user), PRIVATE_KEY, {
+            expiresIn: "30d",
+            algorithm: "RS256"
           });
           return res({ user, token });
         }
