@@ -23,4 +23,4 @@ yarn edit
 yarn swagger-test
 ```
 
-[Authorization Bearer](https://swagger.io/docs/specification/authentication/bearer-authentication/)
+[Authorization Bearer](https://stackoverflow.com/questions/32910065/how-can-i-represent-authorization-bearer-token-in-a-swagger-spec-swagger-j)

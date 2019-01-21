@@ -179,8 +179,8 @@ paths:
   /v1/tasks:
     x-swagger-router-controller: task
     get:
-      description: return all todos
-      operationId: getTasks
+      description: return all tasks
+      operationId: findAll
       security:
         - Bearer: []
       produces:
@@ -194,6 +194,23 @@ paths:
       responses:
         200:
           description: Get tasks by user id
+    post:
+      description: create a new task
+      operationId: create
+      security:
+        - Bearer: []
+      produces:
+        - application/json
+      parameters:
+        - name: task
+          in: body
+          description: "New task"
+          required: true
+          schema:
+            $ref: "#/definitions/Task"
+      responses:
+        200:
+          description: Create a new task successfully
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -248,6 +265,13 @@ definitions:
         $ref: "#/definitions/FullName"
       sex:
         type: string
+  FullName:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
   AddUserResponse:
     type: object
     description: It returns a created user object
@@ -277,10 +301,49 @@ definitions:
         type: string
       id:
         type: number
-  FullName:
+#Task
+  Task:
     type: object
+    description: Task object
+    required:
+      - title
+      - userId
     properties:
-      firstName:
+      title:
         type: string
-      lastName:
+      attribute:
         type: string
+      priority:
+        type: integer
+      now: 
+        type: integer
+      startAt:
+        type: integer
+      endAt:
+        type: integer
+      estimated_time:
+        type: integer
+      spent_time:
+        type: integer
+      all_day:
+        type: boolean
+      source:
+        type: string
+      deleted:
+        type: boolean
+      archived:
+        type: boolean
+      completed:
+        type: boolean
+      hidden:
+        type: boolean
+      tags:
+        type: array
+        items:
+          type: string
+      projectId: 
+        type: string
+      userId:
+        type: string
+      
+    
