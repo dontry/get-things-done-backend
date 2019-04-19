@@ -32,6 +32,8 @@ import { Role } from "../types/Role";
 export class User {
   public static async hashPassword(password: string): Promise<string> {
     try {
+      // const salt = await bcrypt.genSalt();
+      // 10 means salt rounds
       return await bcrypt.hash(password, 10);
     } catch (error) {
       throw error;

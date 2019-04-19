@@ -2,6 +2,8 @@ import { Entry } from "./Entry";
 import { Entity, Column, ObjectID } from "typeorm";
 import { IReminder, IRepeater } from "../types";
 import { IsNotEmpty } from "class-validator";
+import { toHexString } from "../../utils";
+import { Exclude, Transform } from "class-transformer";
 
 @Entity()
 export class Task extends Entry {
@@ -17,6 +19,10 @@ export class Task extends Entry {
   @Column()
   public projectId: string | ObjectID;
 
+  // @Exclude()
+  @Transform((id: any) => {
+    return toHexString(id.id);
+  })
   @IsNotEmpty()
   @Column()
   public userId: string | ObjectID;

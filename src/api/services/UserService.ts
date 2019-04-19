@@ -62,6 +62,10 @@ export class UserService {
    */
   public async create(user: User): Promise<User> {
     this.log.info(`Create a new user => ${user.toString()}`);
+    /*
+    This will strip all properties that don't have any decorators.
+    If no other decorator is suitable for your property, you can use @Allow decorator
+     */
     const errors = await validate(user, { whitelist: true });
     if (errors.length > 0) {
       throw new ModelValidationError(errors);
@@ -90,6 +94,7 @@ export class UserService {
     this.log.info("Update a user");
     const oldUser = await this.userRepository.findOne(id);
     if (oldUser) {
+      // Preserve use id & role
       user.id = oldUser.id;
       user.role = oldUser.role;
       const errors = await validate(user, { whitelist: true });

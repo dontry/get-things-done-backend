@@ -63,6 +63,7 @@
     "@types/shelljs": "^0.8.0",
     "@types/supertest": "^2.0.6",
     "@types/swagger-ui-express": "^3.0.0",
+    "axios-mock-adapter": "^1.16.0",
     "cz-conventional-changelog": "2.1.0",
     "jest": "^23.6.0",
     "nodemon": "^1.18.6",
@@ -76,14 +77,15 @@
   "scripts": {
     "copy-assets": "ts-node copyStaticAssets.ts",
     "build": "tsc",
-    "edit": "swagger_swagger_fileName=src/swagger/swagger.yaml swagger project edit",
     "start": "npm run serve",
-    "swagger-test": "swagger project test",
-    "jest": "jest  --coverage --verbose --detectOpenHandles",
-    "watch": "nodemon",
+    "test:coverage": "jest  --coverage --verbose --detectOpenHandles",
+    "test:edit": "swagger_swagger_fileName=src/swagger/swagger.yaml swagger project edit",
+    "test:api": "swagger_swagger_fileName=src/swagger/swagger.yaml swagger project test",
+    "dev:watch": "nodemon",
     "dev": "ts-node  --inspect-brk=5858 src/index.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "serve": "NODE_ENV=production node --inspect-brk=5858 dist/src/index.js"
+    "serve": "NODE_ENV=production node --inspect-brk=5858 dist/src/index.js",
+    "clusters": "ts-node src/clusters.ts"
   },
   "config": {
     "commitizen": {

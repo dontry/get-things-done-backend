@@ -1,0 +1,273 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.1",
+    "title": "Get Things Done App"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/v1/hello": {
+      "x-swagger-router-controller": "hello_world",
+      "get": {
+        "description": "Returns 'Hello' to the caller",
+        "operationId": "getHello",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The name of the person to whom to say hello",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/HelloWorldResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "x-swagger-router-controller": "AuthController",
+      "post": {
+        "description": "User login",
+        "operationId": "login",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "credential",
+            "in": "body",
+            "description": "User's username",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Credential"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login sucess"
+          }
+        }
+      }
+    },
+    "/v1/auth/register": {
+      "x-swagger-router-controller": "AuthController",
+      "post": {
+        "description": "User login",
+        "operationId": "register",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "registration info",
+            "in": "body",
+            "description": "User's registration info",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegistrationInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Register success"
+          }
+        }
+      }
+    },
+    "/v1/users": {
+      "x-swagger-router-controller": "users",
+      "get": {
+        "description": "Returns all users",
+        "operationId": "getUsers",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "No authorization token"
+          }
+        }
+      },
+      "post": {
+        "description": "Create a user",
+        "operationId": "addUser",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "The user to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddUserResponse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/{id}": {
+      "x-swagger-router-controller": "UserController",
+      "get": {
+        "description": "Return a user by id",
+        "operationId": "getUser",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of ther user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a user by id",
+        "operationId": "updateUser",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the user being updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "updated_user",
+            "in": "body",
+            "description": "The updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "schema": {
+              "$ref": "#/definitions/UpdateUserResponse"
+            }
+          },
+          "400": {
+            "description": "Yikes! An error!"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a user by id",
+        "operationId": "delete",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted",
+            "schema": {
+              "$ref": "#/definitions/DeleteUserResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks": {
+      "x-swagger-router-controller": "task",
+      "get": {
+        "description": "return all tasks",
+        "operationId": "findAll",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Get tasks by user id"
+          }
+        }
+      },
+      "post": {
+        "description": "create a new task",
+        "operationId": "create",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "task",
+            "in": "body",
+            "description": "New task",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create a new task successfully"
+          }
+        }
+      }
+    }
+  }
+}

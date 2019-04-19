@@ -23,6 +23,10 @@ export class Passport {
             const equal: boolean = await User.comparePassword(user, password);
             return equal ? done(null, user) : done("Password incorrect");
           }
+          /*
+            The done() callback sends the authenticated user’s data to the authenticated routes,
+            which receive these data via the req.user object.
+          */
           return done(null, false);
         } catch (error) {
           return done(error.message);

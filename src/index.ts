@@ -1,11 +1,5 @@
-import { bootstrapMicroframework } from "microframework-w3tec";
-import { expressLoader, iocLoader, typeormLoader } from "./loaders";
-import { logger } from "./utils";
+import { Server } from "./server";
 
-bootstrapMicroframework({
-  loaders: [iocLoader, typeormLoader, expressLoader]
-})
-  .then(() => {
-    logger.debug("Server is running");
-  })
-  .catch(error => logger.error(`Server is crashed: ${error}`));
+const server = new Server();
+
+server.run();

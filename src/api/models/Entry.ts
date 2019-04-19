@@ -19,7 +19,7 @@ export abstract class Entry {
   @Transform((id: any) => {
     return toHexString(id.id);
   })
-  public id: ObjectID;
+  public id: string | ObjectID;
 
   @IsNotEmpty()
   @Column()
@@ -28,7 +28,7 @@ export abstract class Entry {
   @Column()
   public attribute: string;
 
-  @Min(0)
+  @Min(1)
   @Max(5)
   @Column()
   public priority: number;

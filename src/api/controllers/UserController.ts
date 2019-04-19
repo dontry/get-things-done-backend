@@ -46,6 +46,11 @@ export class UserController {
     return this.userService.changeRole(id, role);
   }
 
+  @Put("/:id")
+  public updateUser(@Param("id") id: string, @Body() user): Promise<any> {
+    return this.userService.update(id, user);
+  }
+
   @Get()
   public findAll(@Req() request): Promise<User[]> {
     logger.debug(`request user: ${request.user}`);
