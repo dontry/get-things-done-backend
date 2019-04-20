@@ -10,15 +10,18 @@ import {
   UseBefore,
   Req,
   Delete,
-  Put
+  Put,
+  UseInterceptor
 } from "routing-controllers";
 import { User } from "../models";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
 import { logger } from "../../utils";
 import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
+import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
+@UseInterceptor(ResponseInterceptor())
 @JsonController("/users")
 export class UserController {
   constructor(private userService: UserService) {}

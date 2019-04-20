@@ -7,19 +7,19 @@ import { Exclude, Transform } from "class-transformer";
 
 @Entity()
 export class Task extends Entry {
-  @Column()
+  @Column({ default: [] })
   public reminders: IReminder[];
 
-  @Column()
-  public repeater: IRepeater[];
+  @Column({ default: [] })
+  public repeaters: IRepeater[];
 
-  @Column()
+  @Column({ default: [] })
   public tags: string[];
 
   @Column()
   public projectId: string | ObjectID;
 
-  // @Exclude()
+  @Exclude()
   @Transform((id: any) => {
     return toHexString(id.id);
   })

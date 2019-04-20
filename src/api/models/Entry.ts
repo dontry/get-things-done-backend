@@ -37,41 +37,46 @@ export abstract class Entry {
   @Column()
   public now: number;
 
+  @Column({
+    default: Date.now()
+  })
+  public createdAt: number;
+
   @Min(0)
-  @Column({ name: "start_at" })
+  @Column({ name: "start_at", default: 0 })
   public startAt: number;
 
   @Min(0)
-  @Column({ name: "end_at" })
+  @Column({ name: "end_at", default: 0 })
   public endAt: number;
 
   @Min(0)
-  @Column({ name: "estimated_time" })
+  @Column({ name: "estimated_time", default: 0 })
   public estimatedTime: number;
 
   @Min(0)
-  @Column({ name: "spent_time" })
+  @Column({ name: "spent_time", default: 0 })
   public spentTime: number;
 
-  @Column({ name: "all_day" })
+  @Column({ name: "all_day", default: true })
   public allDay: boolean;
 
   @Column()
   public source: string;
 
-  @Column()
+  @Column({ default: false })
   public deleted: boolean;
 
-  @Column()
+  @Column({ default: false })
   public archived: boolean;
 
-  @Column()
+  @Column({ default: false })
   public completed: boolean;
 
-  @Column()
+  @Column({ default: false })
   public hidden: boolean;
 
-  @Column()
+  @Column({ default: [] })
   public tags: string[];
 
   @Column()

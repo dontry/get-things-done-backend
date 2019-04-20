@@ -6,14 +6,17 @@ import {
   JsonController,
   UseBefore,
   Req,
-  Put
+  Put,
+  UseInterceptor
 } from "routing-controllers";
 import { TaskService } from "../services";
 import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
 import { Task } from "../models";
+import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
+@UseInterceptor(ResponseInterceptor())
 @JsonController("/tasks")
 export class TaskController {
   constructor(private taskService: TaskService) {}

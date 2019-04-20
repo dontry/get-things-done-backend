@@ -7,7 +7,8 @@ import {
   Body,
   OnUndefined,
   Put,
-  UseBefore
+  UseBefore,
+  UseInterceptor
 } from "routing-controllers";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -19,6 +20,7 @@ import {
   AuthorizationMiddleware
 } from "../../api/middlewares";
 import { PRIVATE_KEY } from "../../auth";
+import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 
 @JsonController("/auth")
 export class AuthController {
@@ -37,8 +39,9 @@ export class AuthController {
         (error, user, info) => {
           if (error || !user) {
             return rej({
-              message: info ? info.message : "Login failed",
-              error
+              message: info ? info.message : `Login failed: ${error}`,
+              httpCode: 401,
+              name: "Unauthorized"
             });
           }
 
