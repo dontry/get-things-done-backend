@@ -3,5 +3,6 @@ export { LoggerMock } from "./LoggerMock";
 export {
   createDatabaseConnection,
   syncDatabase,
-  closeDatabase
+  closeDatabase,
+  migrateDatabase
 } from "./Database";

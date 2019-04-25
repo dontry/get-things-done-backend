@@ -6,13 +6,8 @@ export class Sequence {
   public id: ObjectID;
 
   @Column()
-  public categoryName: string;
+  public name: string;
 
   @Column({ default: 0 })
   public value: number;
-
-  // constructor(categoryName: string) {
-  //   this.categoryName = categoryName;
-  //   this.sequenceValue = 0;
-  // }
 }

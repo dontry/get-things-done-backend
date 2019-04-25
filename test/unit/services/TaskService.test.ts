@@ -1,12 +1,14 @@
 import "reflect-metadata";
 import faker from "faker";
 import { RepositoryMock, LoggerMock } from "../../utils";
-import { Task } from "../../../src/api/models";
+import { Task, Sequence } from "../../../src/api/models";
 import { TaskService } from "../../../src/api/services";
 
 faker.seed(100);
 describe("TaskService", () => {
-  const repo = new RepositoryMock<Task>();
+  const taskRepo = new RepositoryMock<Task>();
+  const sequenceRepo = new RepositoryMock<Sequence>();
+
   const logger = new LoggerMock();
   const userId = "adfad212asdf";
   const title = faker.lorem.words(5);
@@ -16,14 +18,18 @@ describe("TaskService", () => {
   let taskService;
 
   beforeEach(async () => {
-    taskService = new TaskService(repo as any, logger as any);
+    taskService = new TaskService(
+      taskRepo as any,
+      sequenceRepo as any,
+      logger as any
+    );
   });
 
   it("should create a task", async done => {
     const task = new Task();
     task.title = title;
     task.userId = userId;
-    task.now = now;
+    task.createdAt = now;
     task.startAt = endAt;
     task.endAt = startAt;
     const actual = await taskService.create(task);

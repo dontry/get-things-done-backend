@@ -7,6 +7,7 @@ export class RepositoryMock<T> {
   public findOneMock = jest.fn();
   public saveMock = jest.fn();
   public deleteMock = jest.fn();
+  public getNextSequenceMock = jest.fn();
 
   /**
    * find
@@ -43,5 +44,13 @@ export class RepositoryMock<T> {
   public delete(value: T, ...args: any[]): Promise<T> {
     this.deleteMock(value, args);
     return Promise.resolve(value);
+  }
+
+  /**
+   * getNextSequenceValue
+   */
+  public getNextSequenceValue(name: string): Promise<number> {
+    this.getNextSequenceMock(name);
+    return Promise.resolve(0);
   }
 }

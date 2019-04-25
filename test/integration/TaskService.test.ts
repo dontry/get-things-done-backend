@@ -1,10 +1,15 @@
 import { Container } from "typedi";
-import { User, Task } from "../../src/api/models";
-import { UserService, TaskService } from "../../src/api/services";
+import { Task } from "../../src/api/models";
+import { TaskService } from "../../src/api/services";
 import { Connection } from "typeorm";
-import { createDatabaseConnection, closeDatabase } from "../utils";
+import {
+  createDatabaseConnection,
+  closeDatabase,
+  migrateDatabase
+} from "../utils";
 import faker from "faker";
 import { logger } from "../../src/utils";
+import { POS_SEQUENCE_STEP } from "../../src/constants";
 
 describe("Task service", () => {
   const userId = "adsfas1.123df";
@@ -18,12 +23,13 @@ describe("Task service", () => {
   let taskService: TaskService;
   beforeAll(async done => {
     connection = await createDatabaseConnection();
+    await migrateDatabase(connection);
     taskService = Container.get<TaskService>(TaskService);
     done();
   });
 
   afterAll(async done => {
-    // await connection.getMongoRepository(Task).clear();
+    await connection.getMongoRepository(Task).clear();
     closeDatabase(connection);
     done();
   });
@@ -33,8 +39,18 @@ describe("Task service", () => {
     task.create(title, userId, attribute, createdAt);
     const actual = await taskService.create(task);
     expect(actual.title).toBe(task.title);
+    expect(typeof actual.pos).toBe("number");
+    expect(actual.pos).toBe(0);
     expect(actual.attribute).toBe(attribute);
     expect(actual.createdAt).toBe(createdAt);
+    done();
+  });
+
+  it("should create a new task in the database with incremental pos sequence", async done => {
+    const task = new Task();
+    task.create(title, userId, attribute, createdAt);
+    const actual = await taskService.create(task);
+    expect(actual.pos).toBe(POS_SEQUENCE_STEP);
     done();
   });
 

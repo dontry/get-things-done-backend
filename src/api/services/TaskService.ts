@@ -1,15 +1,19 @@
 import { Service } from "typedi";
+import { InternalServerError } from "routing-controllers";
 import { OrmRepository } from "typeorm-typedi-extensions";
-import { TaskRepository } from "../repositories";
+import { TaskRepository, SequenceRepository } from "../repositories";
 import { ILogger } from "../../utils";
 import { Logger } from "../../decorators";
-import { Task, User } from "../models";
+import { Task } from "../models";
+import { TASK_POSITION } from "../../constants";
 import { ObjectID } from "typeorm";
 
 @Service()
 export class TaskService {
+  public function;
   constructor(
     @OrmRepository() private taskRepository: TaskRepository,
+    @OrmRepository() private sequenceRepository: SequenceRepository,
     @Logger() private log: ILogger
   ) {}
 
@@ -18,8 +22,13 @@ export class TaskService {
     return this.taskRepository.find({ userId });
   }
 
-  public create(task: Task): Promise<Task> {
+  public async create(task: Task): Promise<Task> {
     this.log.info(`Create a new task => ${task.toString()}`);
+
+    const sequence: number = await this.sequenceRepository.getNextSequenceValue(
+      TASK_POSITION
+    );
+    task.pos = sequence;
     return this.taskRepository.save(task);
   }
 

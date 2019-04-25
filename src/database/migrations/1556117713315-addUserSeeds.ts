@@ -40,7 +40,7 @@ export class addUserSeeds1556117713315 implements MigrationInterface {
     await mongoManager.save(user);
 
     const sequence = new Sequence();
-    sequence.categoryName = "taskPosition";
+    sequence.name = "taskPosition";
     sequence.value = 0;
     await mongoManager.save(sequence);
   }
