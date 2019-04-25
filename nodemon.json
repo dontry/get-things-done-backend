@@ -2,6 +2,7 @@
   "ignore": ["**/*.tes.ts", "**/*.spec.ts", ".git", "node_modules"],
   "delay": "3000",
   "watch": ["src"],
+  "environment": "development",
   "exec": "ts-node -inspect-brk=5858 src/index.ts",
   "execMap": {
     "ts": "-r ts-node/register"

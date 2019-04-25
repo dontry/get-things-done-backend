@@ -25,7 +25,7 @@ describe("User service", () => {
     connection = await createDatabaseConnection();
   });
   afterAll(async done => {
-    connection.getMongoRepository(User).clear();
+    await connection.getMongoRepository(User).clear();
     await closeDatabase(connection);
     done();
   });

@@ -1,8 +1,8 @@
 import request from "supertest";
 import { IBootstrapSettings } from "../utils/bootstrap";
 import { perpareServer } from "../utils/server";
-import { Connection } from "typeorm";
-import { createDatabaseConnection, closeDatabase } from "../utils";
+import { Connection, EntityManager } from "typeorm";
+import { closeDatabase } from "../utils";
 import { User } from "../../src/api/models";
 import { Jojo } from "../fixture/UserJojo";
 import { Role } from "../../src/api/types/Role";
@@ -17,8 +17,8 @@ describe("/v1/auth", () => {
   beforeAll(async done => {
     settings = await perpareServer();
     connection = settings.connection;
-    const em = connection.createEntityManager();
-    const user = new User();
+    const em: EntityManager = connection.createEntityManager();
+    const user: User = new User();
     const { username, email, password, sex, fullName, age, role } = Jojo;
     user.create(username, password, email, fullName, age, sex, role as Role);
     jojo = await em.save(user);

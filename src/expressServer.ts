@@ -1,12 +1,11 @@
 import dotenv from "dotenv";
 import HelloWorldController from "./api/controllers/hello_world";
-import path from "path";
 import "reflect-metadata";
 import { createExpressServer } from "routing-controllers";
 import { logger } from "./utils/index";
 
 dotenv.config({ path: ".env" });
-const port = process.env.PORT || 10010;
+const port = process.env.PORT || 9999;
 
 const app = createExpressServer({
   controllers: [HelloWorldController],

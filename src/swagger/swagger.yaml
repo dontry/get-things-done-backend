@@ -14,7 +14,7 @@ schemes:
 securityDefinitions:
   Bearer:
     type: apiKey
-    name:  Authorization
+    name: Authorization
     in: header
 # format of bodies a client can send (Content-Type)
 consumes:
@@ -50,7 +50,7 @@ paths:
   /v1/auth/login:
     x-swagger-router-controller: AuthController
     post:
-      description:  User login
+      description: User login
       operationId: login
       produces:
         - "application/json"
@@ -81,7 +81,7 @@ paths:
       responses:
         200:
           description: "Register success"
-        
+
   /v1/users:
     x-swagger-router-controller: users
     get:
@@ -112,7 +112,7 @@ paths:
           description: "Get user success"
           schema:
             $ref: "#/definitions/User"
- 
+
   /v1/users/{id}:
     x-swagger-router-controller: UserController
     get:
@@ -250,7 +250,7 @@ definitions:
       password:
         type: string
         description: User's password(should be hashed)
-  RegistrationInfo: 
+  RegistrationInfo:
     type: object
     properties:
       username:
@@ -301,7 +301,7 @@ definitions:
         type: string
       id:
         type: number
-#Task
+  #Task
   Task:
     type: object
     description: Task object
@@ -315,35 +315,33 @@ definitions:
         type: string
       priority:
         type: integer
-      now: 
+      createdAt:
         type: integer
       startAt:
         type: integer
       endAt:
         type: integer
-      estimated_time:
+      estimatedTime:
         type: integer
-      spent_time:
+      spentTime:
         type: integer
-      all_day:
+      allDay:
         type: boolean
       source:
         type: string
       deleted:
-        type: boolean
+        type: integer
       archived:
-        type: boolean
+        type: integer
       completed:
-        type: boolean
+        type: interger
       hidden:
-        type: boolean
+        type: integer
       tags:
         type: array
         items:
           type: string
-      projectId: 
+      projectId:
         type: string
       userId:
         type: string
-      
-    

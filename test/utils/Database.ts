@@ -8,9 +8,10 @@ export const createDatabaseConnection = async (): Promise<Connection> => {
     database: "test",
     logging: true,
     entities: ["src/api/models/*.ts"],
-    migrations: ["src/database/migrations"],
+    migrations: ["src/database/migrations/*.ts"],
     cli: {
-      entitiesDir: "src/api/models"
+      entitiesDir: "src/api/models",
+      migrationsDir: "src/database/migrations"
     },
     synchronize: true
   });

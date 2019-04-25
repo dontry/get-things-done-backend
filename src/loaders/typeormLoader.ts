@@ -6,9 +6,11 @@ import {
 import {
   createConnection,
   getConnectionOptions,
-  ConnectionOptions
+  ConnectionOptions,
+  EntityManager
 } from "typeorm";
 import { logger } from "../utils";
+import { Sequence } from "../api/models/Sequence";
 
 export const typeormLoader: MicroframeworkLoader = async (
   settings: MicroframeworkSettings | undefined
@@ -27,6 +29,8 @@ export const typeormLoader: MicroframeworkLoader = async (
   }
   const connectionOptions = Object.assign(loadedConnectionOptions, options);
   const connection = await createConnection(connectionOptions);
+  // const em: EntityManager = connection.createEntityManager();
+  // await initializeSequence(em);
 
   if (settings) {
     settings.setData("connection", connection);
