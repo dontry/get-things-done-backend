@@ -3,11 +3,11 @@ import { IsNotEmpty } from "class-validator";
 
 class FullName {
   @IsNotEmpty()
-  @Column({ name: "first_name" })
+  @Column()
   public firstName: string;
 
   @IsNotEmpty()
-  @Column({ name: "last_name" })
+  @Column()
   public lastName: string;
 
   public toString(): string {

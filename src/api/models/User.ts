@@ -23,8 +23,6 @@ import FullName from "./FullName";
 import { PasswordPattern } from "../validators";
 import { Sex } from "../types/Sex";
 import { toHexString } from "../../utils";
-import { Task } from "./Task";
-import { Project } from "./Project";
 import { Role } from "../types/Role";
 
 @Entity()
@@ -92,18 +90,13 @@ export class User {
   @Exclude({ toPlainOnly: true })
   public role: Role;
 
-  // @OneToMany(type => Project, project => project.user, { cascade: true })
-  // public projects: Project[];
-
-  // @OneToMany(type => Task, task => task.user, { cascade: true })
-  // public tasks: Task[];
-
   public toString(): string {
     return `username: ${this.username},
             email: ${this.email},
             full name: ${this.fullName ? this.fullName.toString() : ""}
             `;
   }
+
   public create(
     username: string,
     password: string,

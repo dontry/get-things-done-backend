@@ -27,11 +27,15 @@ export class Task extends Entry {
   @Column()
   public userId: string | ObjectID;
 
-  public create(title: string, userId: string | ObjectID, now?: number) {
+  public create(
+    title: string,
+    userId: string | ObjectID,
+    attribute: string,
+    createdAt: number
+  ) {
     this.title = title;
     this.userId = userId;
-    if (now) {
-      this.now = now;
-    }
+    this.createdAt = createdAt;
+    this.attribute = attribute;
   }
 }

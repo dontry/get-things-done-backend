@@ -21,7 +21,7 @@ import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
-@UseInterceptor(ResponseInterceptor())
+// @UseInterceptor(ResponseInterceptor())
 @JsonController("/users")
 export class UserController {
   constructor(private userService: UserService) {}

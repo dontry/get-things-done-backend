@@ -16,7 +16,7 @@ import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
-@UseInterceptor(ResponseInterceptor())
+// @UseInterceptor(ResponseInterceptor())
 @JsonController("/tasks")
 export class TaskController {
   constructor(private taskService: TaskService) {}

@@ -20,7 +20,6 @@ import {
   AuthorizationMiddleware
 } from "../../api/middlewares";
 import { PRIVATE_KEY } from "../../auth";
-import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 
 @JsonController("/auth")
 export class AuthController {

@@ -34,47 +34,46 @@ export abstract class Entry {
   public priority: number;
 
   @Min(0)
-  @Column()
-  public now: number;
-
-  @Column({
-    default: Date.now()
-  })
+  @Column({ default: Date.now() })
   public createdAt: number;
 
   @Min(0)
-  @Column({ name: "start_at", default: 0 })
+  @Column({ default: 0 })
   public startAt: number;
 
   @Min(0)
-  @Column({ name: "end_at", default: 0 })
+  @Column({ default: 0 })
+  public pos: number;
+
+  @Min(0)
+  @Column({ default: 0 })
   public endAt: number;
 
   @Min(0)
-  @Column({ name: "estimated_time", default: 0 })
+  @Column({ default: 0 })
   public estimatedTime: number;
 
   @Min(0)
-  @Column({ name: "spent_time", default: 0 })
+  @Column({ default: 0 })
   public spentTime: number;
 
-  @Column({ name: "all_day", default: true })
+  @Column({ default: true })
   public allDay: boolean;
 
   @Column()
   public source: string;
 
-  @Column({ default: false })
-  public deleted: boolean;
+  @Column({ default: 0 })
+  public deleted: number;
 
-  @Column({ default: false })
-  public archived: boolean;
+  @Column({ default: 0 })
+  public archived: number;
 
-  @Column({ default: false })
-  public completed: boolean;
+  @Column({ default: 0 })
+  public completed: number;
 
-  @Column({ default: false })
-  public hidden: boolean;
+  @Column({ default: 0 })
+  public hidden: number;
 
   @Column({ default: [] })
   public tags: string[];
@@ -92,7 +91,11 @@ export abstract class Entry {
     const startAtDate = new Date(this.startAt);
     const endAtDate = new Date(this.endAt);
 
-    if (isAfter(startAtDate, endAtDate)) {
+    if (
+      this.startAt !== 0 &&
+      this.endAt !== 0 &&
+      isAfter(startAtDate, endAtDate)
+    ) {
       throw new Error("Validation error: startAt should be prior to endAt");
     }
   }
