@@ -25,6 +25,16 @@ yarn swagger-test
 
 [Authorization Bearer](https://swagger.io/docs/specification/authentication/bearer-authentication/)
 
+## Running and reverting migrations
+
+```sh
+ts-node ./node_modules/typeorm/cli.js migration:run
+```
+
+```
+ts-node ./node_modules/typeorm/cli.js migration:revert
+```
+
 ## Authentication
 
 - [JWT Official](https://jwt.io/)

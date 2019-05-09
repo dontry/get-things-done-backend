@@ -24,6 +24,7 @@ import { PasswordPattern } from "../validators";
 import { Sex } from "../types/Sex";
 import { toHexString } from "../../utils";
 import { Role } from "../types/Role";
+import { ObjectId } from "bson";
 
 @Entity()
 @Unique(["username"])
@@ -54,7 +55,7 @@ export class User {
   @Transform((id: any) => {
     return toHexString(id.id);
   })
-  public id: string | ObjectID;
+  public id: string | ObjectID | ObjectId;
 
   // Unique column: https://github.com/typeorm/typeorm/issues/2034
   @Index({ unique: true })

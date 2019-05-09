@@ -7,6 +7,7 @@ import { Logger } from "../../decorators";
 import { Task } from "../models";
 import { TASK_POSITION } from "../../constants";
 import { ObjectID } from "typeorm";
+import { ObjectId } from "bson";
 
 @Service()
 export class TaskService {
@@ -37,7 +38,17 @@ export class TaskService {
    */
   public update(id: string, task: Task): Promise<Task> {
     this.log.info("Update a task");
-    task.id = new ObjectID(id);
+    task.id = new ObjectId(id);
     return this.taskRepository.save(task);
+  }
+
+  /**
+   * delete
+   */
+  public async delete(id: string): Promise<any> {
+    this.log.info("Delete a task");
+    const _id = new ObjectId(id);
+    const result = await this.taskRepository.findOneAndDelete({ _id });
+    return result.value;
   }
 }

@@ -12,6 +12,7 @@ import { toHexString } from "../../utils";
 import { IsNotEmpty, Min, Max } from "class-validator";
 import { isAfter } from "date-fns";
 import Note from "./Note";
+import { ObjectId } from "bson";
 
 @Entity()
 export abstract class Entry {
@@ -19,7 +20,7 @@ export abstract class Entry {
   @Transform((id: any) => {
     return toHexString(id.id);
   })
-  public id: string | ObjectID;
+  public id: string | ObjectID | ObjectId;
 
   @IsNotEmpty()
   @Column()

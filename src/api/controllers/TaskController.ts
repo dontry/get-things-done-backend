@@ -7,6 +7,7 @@ import {
   UseBefore,
   Req,
   Put,
+  Delete,
   UseInterceptor
 } from "routing-controllers";
 import { TaskService } from "../services";
@@ -43,5 +44,10 @@ export class TaskController {
     const { user } = request;
     task.userId = user.id;
     return this.taskService.update(id, task);
+  }
+
+  @Delete("/:id")
+  public delete(@Param("id") id: string): Promise<void> {
+    return this.taskService.delete(id);
   }
 }
