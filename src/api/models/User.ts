@@ -53,7 +53,11 @@ export class User {
 
   @ObjectIdColumn()
   @Transform((id: any) => {
-    return toHexString(id.id);
+    if (typeof id === "string") {
+      return id;
+    } else {
+      return toHexString(id.id);
+    }
   })
   public id: string | ObjectID | ObjectId;
 

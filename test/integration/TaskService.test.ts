@@ -46,6 +46,15 @@ describe("Task service", () => {
     done();
   });
 
+  it("should delete a task successfully", async done => {
+    const task = new Task();
+    task.create(title, userId, attribute, createdAt);
+    const newTask = await taskService.create(task);
+    const deletedTask = await taskService.delete(newTask.id);
+    expect(newTask).toEqual(deletedTask);
+    done();
+  });
+
   it("should create a new task in the database with incremental pos sequence", async done => {
     const task = new Task();
     task.create(title, userId, attribute, createdAt);

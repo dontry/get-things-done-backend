@@ -4,6 +4,7 @@ import { IReminder, IRepeater } from "../types";
 import { IsNotEmpty } from "class-validator";
 import { toHexString } from "../../utils";
 import { Exclude, Transform } from "class-transformer";
+import { ObjectId } from "bson";
 
 @Entity()
 export class Task extends Entry {
@@ -25,11 +26,11 @@ export class Task extends Entry {
   })
   @IsNotEmpty()
   @Column()
-  public userId: string | ObjectID;
+  public userId: string | ObjectID | ObjectId;
 
   public create(
     title: string,
-    userId: string | ObjectID,
+    userId: string | ObjectID | ObjectId,
     attribute: string,
     createdAt: number
   ) {

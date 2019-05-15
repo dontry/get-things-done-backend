@@ -36,13 +36,7 @@ export class TaskController {
   }
 
   @Put("/:id")
-  public update(
-    @Param("id") id: string,
-    @Body() task: Task,
-    @Req() request
-  ): Promise<Task> {
-    const { user } = request;
-    task.userId = user.id;
+  public update(@Param("id") id: string, @Body() task: Task): Promise<Task> {
     return this.taskService.update(id, task);
   }
 
