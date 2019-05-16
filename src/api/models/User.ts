@@ -90,10 +90,15 @@ export class User {
   @Column()
   public sex: Sex;
 
-  @Column({ default: () => Role.SUBSCRIBER })
+  @Column({ default: Role.SUBSCRIBER })
   @IsEnum(Role)
   @Exclude({ toPlainOnly: true })
   public role: Role;
+
+  // https://github.com/typestack/class-transformer#skipping-depend-of-operation
+  @Column({ default: false })
+  @Exclude({ toPlainOnly: true })
+  public isVerified: boolean;
 
   public toString(): string {
     return `username: ${this.username},
@@ -109,11 +114,13 @@ export class User {
     fullName?: FullName,
     age?: number,
     sex?: Sex,
-    role?: Role
+    role?: Role,
+    isVerified?: boolean
   ) {
     this.username = username;
     this.password = password;
     this.email = email;
+    this.isVerified = isVerified || false;
     if (fullName) {
       this.fullName = fullName;
     }
@@ -130,5 +137,6 @@ export class User {
   @BeforeInsert()
   public async hasPassword(): Promise<void> {
     this.password = await User.hashPassword(this.password);
+    this.isVerified = this.isVerified || false;
   }
 }

@@ -92,3 +92,4 @@ typings/
 # secret key
 private.key
 public.key
+sendgrid.env

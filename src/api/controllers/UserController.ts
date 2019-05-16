@@ -70,6 +70,7 @@ export class UserController {
   @Post()
   public create(@Body() user: User): Promise<User> {
     logger.debug(`New user: ${JSON.stringify(user)}`);
+    user.isVerified = true;
     return this.userService.create(user);
   }
 }

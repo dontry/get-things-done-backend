@@ -10,6 +10,7 @@ import _ from "lodash";
 import { Role } from "../types/Role";
 import { UserNotFoundError } from "../errors";
 import { ModelValidationError } from "../errors/ModelValidationError";
+import { ObjectId } from "bson";
 
 @Service()
 export class UserService {
@@ -66,7 +67,8 @@ export class UserService {
     This will strip all properties that don't have any decorators.
     If no other decorator is suitable for your property, you can use @Allow decorator
      */
-    const errors = await validate(user, { whitelist: true });
+    const validUser = _.cloneDeep(user);
+    const errors = await validate(validUser, { whitelist: true });
     if (errors.length > 0) {
       throw new ModelValidationError(errors);
     }
@@ -78,9 +80,10 @@ export class UserService {
    * register
    */
   public async register(user: User): Promise<User> {
-    this.log.info(`Register a new subscriber => ${user.toString()}`);
+    this.log.info(`Register a new subscriber => ${JSON.stringify(user)}`);
     user.role = Role.SUBSCRIBER;
-    const errors = await validate(user, { whitelist: true });
+    const validUser = _.cloneDeep(user);
+    const errors = await validate(validUser, { whitelist: true });
     if (errors.length > 0) {
       throw new ModelValidationError(errors);
     }
@@ -105,6 +108,13 @@ export class UserService {
     } else {
       throw new UserNotFoundError();
     }
+  }
+
+  /**
+   * patch
+   */
+  public patch(id: string | ObjectID, attributes: object): Promise<any> {
+    return this.userRepository.update(id, attributes);
   }
 
   /**

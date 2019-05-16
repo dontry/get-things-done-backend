@@ -20,6 +20,9 @@ export class Passport {
             username
           });
           if (user instanceof User) {
+            if (user.isVerified === false) {
+              return done("The account has not been verified yet.");
+            }
             const equal: boolean = await User.comparePassword(user, password);
             return equal ? done(null, user) : done("Password incorrect");
           }

@@ -16,9 +16,13 @@ import {
   NoCacheMiddleware
 } from "../api/middlewares";
 import { Passport } from "../auth";
+import { sgMail } from "../mailer";
 import { logger } from "../utils";
 import swaggerUi from "swagger-ui-express";
 import { yamlConverter } from "../utils";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
+const port = process.env.PORT || 9999;
 
 export const expressLoader: MicroframeworkLoader = (
   settings: MicroframeworkSettings | undefined
@@ -29,6 +33,12 @@ export const expressLoader: MicroframeworkLoader = (
     const connection = settings.getData("connection");
     Passport.useLocalStrategy();
     Passport.useJWTStrategy();
+
+    logger.info(`SG_MAIL_APIKEY: ${process.env.SG_MAIL_APIKEY}`);
+
+    if (process.env.SG_MAIL_APIKEY) {
+      sgMail.setApiKey(process.env.SG_MAIL_APIKEY);
+    }
 
     const expressApp: Application = createExpressServer({
       cors: true,
@@ -60,8 +70,8 @@ export const expressLoader: MicroframeworkLoader = (
       );
     }
 
-    expressApp.listen(10010, () => {
-      logger.info(`Express is running at port 10010`);
+    expressApp.listen(port, () => {
+      logger.info(`Express is running at port ${port}`);
     });
     settings.setData("express_app", expressApp);
   }
