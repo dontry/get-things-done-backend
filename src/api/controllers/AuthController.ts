@@ -8,10 +8,8 @@ import {
   OnUndefined,
   Put,
   UseBefore,
-  UseInterceptor,
   OnNull,
   Get,
-  Param,
   BadRequestError,
   QueryParam,
   NotFoundError,
@@ -27,9 +25,8 @@ import {
   AuthorizationMiddleware
 } from "../../api/middlewares";
 import { PRIVATE_KEY, PUBLIC_KEY } from "../../auth";
-import { logger, toHexString } from "../../utils";
-import { transporter, sgMail } from "../../mailer";
-import { ObjectId } from "bson";
+import { logger } from "../../utils";
+import { sgMail } from "../../mailer";
 import { IMessage } from "../types/IMessage";
 
 @JsonController("/auth")
