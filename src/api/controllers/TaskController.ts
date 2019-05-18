@@ -8,12 +8,17 @@ import {
   Req,
   Put,
   Delete,
-  UseInterceptor
+  UseInterceptor,
+  QueryParams,
+  QueryParam,
+  BadRequestError
 } from "routing-controllers";
 import { TaskService } from "../services";
 import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
 import { Task } from "../models";
 import ResponseInterceptor from "../interceptors/ResponseInterceptor";
+import Pagination from "../types/Pagination";
+import { Role } from "../types/Role";
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
@@ -23,15 +28,32 @@ export class TaskController {
   constructor(private taskService: TaskService) {}
 
   @Get()
-  public findAll(@Req() request): Promise<Task[]> {
+  public findAll(
+    @QueryParam("limit") limit,
+    @QueryParam("page") page,
+    @QueryParam("category") category,
+    @QueryParam("projectId") projectId,
+    @Req() request
+  ): Promise<Pagination<Task> | Task[]> {
     const { user } = request;
-    return this.taskService.findAll(user.id);
+    if ((!limit || !page) && user.role !== Role.ADMIN) {
+      throw new BadRequestError("Should have pagination params");
+    } else if (!limit || !page) {
+      return this.taskService.findAll(user.id.toString());
+    } else {
+      return this.taskService.find(user.id, {
+        limit,
+        page,
+        category,
+        projectId
+      });
+    }
   }
 
   @Post()
   public create(@Body() task: Task, @Req() request): Promise<Task> {
     const { user } = request;
-    task.userId = user.id;
+    task.userId = user.id.toString();
     return this.taskService.create(task);
   }
 

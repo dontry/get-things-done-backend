@@ -26,11 +26,11 @@ export class Task extends Entry {
   })
   @IsNotEmpty()
   @Column()
-  public userId: string | ObjectID | ObjectId;
+  public userId: string;
 
   public create(
     title: string,
-    userId: string | ObjectID | ObjectId,
+    userId: string,
     attribute: string,
     createdAt: number
   ) {
