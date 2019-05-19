@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { InternalServerError } from "routing-controllers";
+import { InternalServerError, BadRequestError } from "routing-controllers";
 import { OrmRepository } from "typeorm-typedi-extensions";
 import { TaskRepository, SequenceRepository } from "../repositories";
 import { ILogger } from "../../utils";
@@ -88,22 +88,23 @@ function getQueryOptions(
   projectId: string | undefined,
   category: string | undefined
 ) {
-  let queryOptions: any = { userId: userId.toString() };
-  if (projectId) {
+    let queryOptions: any = { userId: userId.toString() };
+    if (projectId) {
+      queryOptions = {
+        projectId,
+        ...queryOptions
+      };
+    }
+    const categoryOption = getOptionByCategory(category);
+
     queryOptions = {
-      projectId,
-      ...queryOptions
+      ...queryOptions,
+      ...categoryOption
     };
+
+    // https://github.com/typeorm/typeorm/issues/970
+    return { where: queryOptions, order: { pos: -1 } };
   }
-  const categoryOption = getOptionByCategory(category);
-
-  queryOptions = {
-    ...queryOptions,
-    ...categoryOption
-  };
-
-  return { where: queryOptions };
-}
 
 const active = {
   deleted: 0,
@@ -158,6 +159,12 @@ function getOptionByCategory(category: string | undefined) {
         },
         ...active
       };
+    case "completed":
+      return {
+        completed: {
+          $gt: 0
+        }
+      };
     case "deleted":
       return {
         deleted: {
@@ -171,6 +178,6 @@ function getOptionByCategory(category: string | undefined) {
         }
       };
     default:
-      return {};
+      throw new BadRequestError("The category param is not valid");
   }
 }

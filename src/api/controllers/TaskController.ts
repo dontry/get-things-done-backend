@@ -36,9 +36,12 @@ export class TaskController {
     @Req() request
   ): Promise<Pagination<Task> | Task[]> {
     const { user } = request;
-    if ((!limit || !page) && user.role !== Role.ADMIN) {
+    if (
+      (limit === undefined || page === undefined) &&
+      user.role !== Role.ADMIN
+    ) {
       throw new BadRequestError("Should have pagination params");
-    } else if (!limit || !page) {
+    } else if (limit === undefined || page === undefined) {
       return this.taskService.findAll(user.id.toString());
     } else {
       return this.taskService.find(user.id, {
