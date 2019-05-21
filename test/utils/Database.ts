@@ -1,20 +1,14 @@
 import { Container } from "typedi";
 import { Connection, createConnection, useContainer } from "typeorm";
+import { logger } from "../../src/utils";
+import { MongoConnectionOptions } from "typeorm/driver/mongodb/MongoConnectionOptions";
 
-export const createDatabaseConnection = async (): Promise<Connection> => {
+export const createDatabaseConnection = async (
+  options: MongoConnectionOptions
+): Promise<Connection> => {
   useContainer(Container);
-  const connection = await createConnection({
-    type: "mongodb",
-    database: "test",
-    logging: true,
-    entities: ["src/api/models/*.ts"],
-    migrations: ["src/database/migrations/*.ts"],
-    cli: {
-      entitiesDir: "src/api/models",
-      migrationsDir: "src/database/migrations"
-    },
-    synchronize: true
-  });
+  // connects to test database;
+  const connection = await createConnection(options);
   return connection;
 };
 
@@ -28,6 +22,7 @@ export const closeDatabase = (connection: Connection) => {
 };
 
 export const migrateDatabase = async (connection: Connection) => {
+  logger.info("run");
   await connection.dropDatabase();
   return connection.runMigrations();
 };

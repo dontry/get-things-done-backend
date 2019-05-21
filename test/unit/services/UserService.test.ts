@@ -41,12 +41,10 @@ describe("UserService", () => {
     const user = new User();
     user.email = "jjoestar@test.com";
     const userService = new UserService(repo as any, logger as any);
-    try {
-      await userService.create(user);
-    } catch (error) {
-      expect(error.length).toBe(3);
-    } finally {
-      done();
-    }
+    const actual = await userService.create(user);
+    expect(actual.email).toBe(user.email);
+    expect(actual.email).toBe(user.email);
+
+    done();
   });
 });

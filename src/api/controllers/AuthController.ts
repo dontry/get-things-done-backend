@@ -67,8 +67,6 @@ export class AuthController {
 
   @Post("/register")
   @HttpCode(201)
-  @OnUndefined(204)
-  @OnNull(204)
   public async register(@Body() user: User): Promise<User> {
     // return this.userService.register(user)
 
@@ -90,13 +88,13 @@ export class AuthController {
               throw new BadRequestError(`${error.message}`);
             }
 
-            const url = `http://localhost:10010/v1/auth/verify?token=${token}`;
+            const url = `http://localhost:8686/v1/auth/verify?token=${token}`;
             const mailData = {
               from: "noreply@todo.com",
               to: user.email,
               subject: "Confirm Email",
               text: "prel",
-              html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+              html: `Please click this <a href="${url}">link</a> to confirm your email`
             };
             await sgMail.send(mailData);
             resolve(user);

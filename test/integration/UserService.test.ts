@@ -51,7 +51,10 @@ describe("User service", () => {
     if (createdUser) {
       createdUser.age = 100;
       createdUser.sex = Sex.MALE;
-      const actual = await userService.update(createdUser.id, createdUser);
+      const actual = await userService.update(
+        createdUser.id.toString(),
+        createdUser
+      );
       if (actual) {
         expect(actual.age).toBe(100);
         expect(actual.sex).toBe(Sex.MALE);

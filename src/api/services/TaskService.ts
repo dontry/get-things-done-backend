@@ -17,7 +17,7 @@ import {
   endOfTomorrow
 } from "date-fns";
 
-interface IQueryOptions {
+interface IFindOptions {
   limit: number;
   page: number;
   category?: string;
@@ -40,7 +40,7 @@ export class TaskService {
 
   public find(
     userId: string,
-    options: IQueryOptions
+    options: IFindOptions
   ): Promise<Pagination<Task>> {
     this.log.info(`Find tasks of user ID ${userId} with opitons`);
     const { limit, page, category, projectId } = options;
@@ -88,23 +88,23 @@ function getQueryOptions(
   projectId: string | undefined,
   category: string | undefined
 ) {
-    let queryOptions: any = { userId: userId.toString() };
-    if (projectId) {
-      queryOptions = {
-        projectId,
-        ...queryOptions
-      };
-    }
-    const categoryOption = getOptionByCategory(category);
-
+  let queryOptions: any = { userId: userId.toString() };
+  if (projectId) {
     queryOptions = {
-      ...queryOptions,
-      ...categoryOption
+      projectId,
+      ...queryOptions
     };
-
-    // https://github.com/typeorm/typeorm/issues/970
-    return { where: queryOptions, order: { pos: -1 } };
   }
+  const categoryOption = getOptionByCategory(category);
+
+  queryOptions = {
+    ...queryOptions,
+    ...categoryOption
+  };
+
+  // https://github.com/typeorm/typeorm/issues/970
+  return { where: queryOptions, order: { pos: -1 } };
+}
 
 const active = {
   deleted: 0,

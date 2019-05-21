@@ -37,6 +37,7 @@ export class UserCreating1557058241376 implements MigrationInterface {
     user.fullName = fullName;
     user.sex = Sex.FEMALE;
     user.role = Role.ADMIN;
+    user.isVerified = true;
     const savedUser = await mongoManager.save(user);
 
     const sequence = new Sequence();
@@ -61,7 +62,7 @@ export class UserCreating1557058241376 implements MigrationInterface {
     task.startAt = 0;
     task.spentTime = 0;
     task.tags = [];
-    task.userId = savedUser.id;
+    task.userId = savedUser.id.toString();
     await mongoManager.save(task);
   }
 

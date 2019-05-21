@@ -1,83 +1,116 @@
-import request from "supertest";
+import supertest from "supertest";
 import { IBootstrapSettings } from "../utils/bootstrap";
 import { perpareServer } from "../utils/server";
-import { Connection, EntityManager } from "typeorm";
 import { closeDatabase } from "../utils";
 import { User } from "../../src/api/models";
-import { Jojo } from "../fixture/UserJojo";
-import { Role } from "../../src/api/types/Role";
-import { Sex } from "../../src/api/types";
-jest.setTimeout(30000);
+import { logger } from "../../src/utils";
+import { sgMail } from "../../src/mailer";
+import createUser from "../fixture/createUser";
+
+jest.setTimeout(60000);
+
+let authorizationToken;
+const tokenRegex = /token=(\S+)"/;
+jest.mock("../../src/mailer", () => {
+  return {
+    sgMail: {
+      send: jest.fn(mailData => {
+        return new Promise(res => {
+          logger.info(mailData.html);
+          const result = tokenRegex.exec(mailData.html);
+          if (result) {
+            authorizationToken = result[1];
+          }
+          res(mailData.html);
+        });
+      }),
+      setApiKey: jest.fn(key => key)
+    }
+  };
+});
 
 describe("/v1/auth", () => {
-  let jojo;
   let settings: IBootstrapSettings;
-  let connection: Connection;
-  let authorizationToken;
+  let request;
+  let register;
+
   beforeAll(async done => {
+    logger.info("beforeall");
     settings = await perpareServer();
-    connection = settings.connection;
-    const em: EntityManager = connection.createEntityManager();
-    const user: User = new User();
-    const { username, email, password, sex, fullName, age, role } = Jojo;
-    user.create(username, password, email, fullName, age, sex, role as Role);
-    jojo = await em.save(user);
+    request = supertest(settings.server);
+    register = registerWith(request);
     done();
   });
 
   afterAll(async done => {
-    if (connection) {
-      connection.getMongoRepository(User).clear();
-      await closeDatabase(connection);
-      done();
+    if (settings.connection) {
+      await closeDatabase(settings.connection);
     }
+    await settings.server.close();
+    jest.clearAllMocks();
+    jest.clearAllTimers();
+    done();
+  });
+
+  afterEach(async done => {
+    if (settings.connection) {
+      await settings.connection.getMongoRepository(User).clear();
+    }
+    done();
   });
 
   test("/register", async done => {
-    request(settings.app)
-      .post("/v1/auth/register")
-      .send({
-        username: "brucelee",
-        email: "brucel@gmail.com",
-        password: "brucelee&jack18",
-        age: 30,
-        sex: Sex.MALE,
-        fullName: {
-          firstName: "Bruce",
-          lastName: "Lee"
-        }
-      })
-      .set("Accept", "application/json")
-      // .expect("Content-type", /json/)
-      .expect(200)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        const actual: User = res.body;
-        expect(actual.username).toBe("brucelee");
-        done();
-      });
+    try {
+      const mockUser = createUser();
+      const response = await register(mockUser);
+      const actual: User = response.body;
+      logger.info("register user:", actual);
+      expect(actual.username).toBe(mockUser.username);
+      done();
+    } catch (error) {
+      return done(error);
+    }
   });
 
-  test("/login", async done => {
-    request(settings.app)
+  test("/login not verified", async done => {
+    const mockUser = createUser();
+    await register(mockUser);
+
+    const res = await request
       .post("/v1/auth/login")
       .send({
-        username: Jojo.username,
-        password: Jojo.password
+        username: mockUser.username,
+        password: mockUser.password
       })
       .set("Accept", "application/json")
       // .expect("Content-type", /json/)
-      .expect(200)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        const actual = res.body;
-        expect(actual.user.username).toBe(Jojo.username);
-        authorizationToken = actual.token;
-        done();
-      });
+      .expect(401);
+
+    expect(res.body.name).toBe("Unauthorized");
+    expect(res.body.message).toBe(
+      "Login failed: The account has not been verified yet."
+    );
+    expect(sgMail.send).toHaveBeenCalledTimes(2); // not sure why it has to be 2
+    done();
+  });
+
+  test("/verify", async done => {
+    const mockUser = createUser();
+    await register(mockUser);
+    const res = await request
+      .get("/v1/auth/verify")
+      .query({ token: authorizationToken })
+      .set("Accept", "application/json")
+      // .expect("Content-type", /json/)
+      .expect(200);
+
+    expect(res.body.message).toBe("This account is verified.");
+    done();
   });
 });
+
+function registerWith(_r) {
+  return async user => {
+    return await _r.post("/v1/auth/register").send(user);
+  };
+}

@@ -30,11 +30,8 @@ export const expressLoader: MicroframeworkLoader = (
   logger.debug("Express loader is loaded");
   if (settings) {
     // Get data from typeormconfig.json
-    const connection = settings.getData("connection");
     Passport.useLocalStrategy();
     Passport.useJWTStrategy();
-
-    logger.info(`SG_MAIL_APIKEY: ${process.env.SG_MAIL_APIKEY}`);
 
     if (process.env.SG_MAIL_APIKEY) {
       sgMail.setApiKey(process.env.SG_MAIL_APIKEY);
@@ -70,9 +67,10 @@ export const expressLoader: MicroframeworkLoader = (
       );
     }
 
-    expressApp.listen(port, () => {
+    const expressServer = expressApp.listen(port, () => {
       logger.info(`Express is running at port ${port}`);
     });
     settings.setData("express_app", expressApp);
+    settings.setData("express_server", expressServer);
   }
 };

@@ -1,15 +1,12 @@
 import { Container } from "typedi";
 import { Task } from "../../src/api/models";
 import { TaskService } from "../../src/api/services";
-import { Connection } from "typeorm";
-import {
-  createDatabaseConnection,
-  closeDatabase,
-  migrateDatabase
-} from "../utils";
+import { closeDatabase, migrateDatabase } from "../utils";
 import faker from "faker";
 import { logger } from "../../src/utils";
 import { POS_SEQUENCE_STEP } from "../../src/constants";
+import { perpareServer } from "../utils/server";
+import { IBootstrapSettings } from "../utils/bootstrap";
 
 describe("Task service", () => {
   const userId = "adsfas1.123df";
@@ -19,18 +16,22 @@ describe("Task service", () => {
   const startAt = Date.now() + 2000;
   const endAt = Date.now() + 3000;
 
-  let connection: Connection;
+  let settings: IBootstrapSettings;
   let taskService: TaskService;
   beforeAll(async done => {
-    connection = await createDatabaseConnection();
-    await migrateDatabase(connection);
+    logger.info("beforeall");
+    settings = await perpareServer();
+    await migrateDatabase(settings.connection);
     taskService = Container.get<TaskService>(TaskService);
     done();
   });
 
   afterAll(async done => {
-    await connection.getMongoRepository(Task).clear();
-    closeDatabase(connection);
+    if (settings.connection) {
+      await settings.connection.getMongoRepository(Task).clear();
+      closeDatabase(settings.connection);
+    }
+    await settings.server.close();
     done();
   });
 
@@ -59,7 +60,7 @@ describe("Task service", () => {
     const task = new Task();
     task.create(title, userId, attribute, createdAt);
     const actual = await taskService.create(task);
-    expect(actual.pos).toBe(POS_SEQUENCE_STEP);
+    expect(actual.pos).toBeGreaterThanOrEqual(POS_SEQUENCE_STEP);
     done();
   });
 
@@ -77,5 +78,16 @@ describe("Task service", () => {
       );
       done();
     }
+  });
+
+  it("should fetch tasks with pagination", async done => {
+    const actual = await taskService.find(userId, {
+      limit: 15,
+      page: 0,
+      category: "inbox"
+    });
+
+    expect(actual.itemCount).toBeGreaterThan(0);
+    expect(actual.totalItems).toBeGreaterThan(0);
   });
 });

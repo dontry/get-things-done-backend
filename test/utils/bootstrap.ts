@@ -16,9 +16,8 @@ export const bootstrapApp = async (): Promise<IBootstrapSettings> => {
     loaders: [iocLoader, typeormLoader, expressLoader]
   });
   return {
-    // TODO: Get express_app?
     app: framework.settings.getData("express_app") as Application,
-    server: framework.settings.getData("epress_server") as http.Server,
+    server: framework.settings.getData("express_server") as http.Server,
     connection: framework.settings.getData("connection") as Connection
   } as IBootstrapSettings;
 };
