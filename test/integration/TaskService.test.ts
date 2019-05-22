@@ -5,7 +5,7 @@ import { closeDatabase, migrateDatabase } from "../utils";
 import faker from "faker";
 import { logger } from "../../src/utils";
 import { POS_SEQUENCE_STEP } from "../../src/constants";
-import { perpareServer, IBootstrapSettings } from "../utils/server";
+import { bootstrapServer, IBootstrapSettings } from "../utils/server";
 
 describe("Task service", () => {
   const userId = "adsfas1.123df";
@@ -19,7 +19,7 @@ describe("Task service", () => {
   let taskService: TaskService;
   beforeAll(async done => {
     logger.info("beforeall");
-    settings = await perpareServer({
+    settings = await bootstrapServer({
       migrate: true
     });
     taskService = Container.get<TaskService>(TaskService);

@@ -11,7 +11,9 @@ import {
   UseInterceptor,
   QueryParams,
   QueryParam,
-  BadRequestError
+  BadRequestError,
+  OnUndefined,
+  HttpCode
 } from "routing-controllers";
 import { TaskService } from "../services";
 import { JwtAuthMiddleware, AuthorizationMiddleware } from "../middlewares";
@@ -19,13 +21,18 @@ import { Task } from "../models";
 import ResponseInterceptor from "../interceptors/ResponseInterceptor";
 import Pagination from "../types/Pagination";
 import { Role } from "../types/Role";
+import { logger, ILogger } from "../../utils";
+import { Logger } from "../../decorators";
 
 @UseBefore(AuthorizationMiddleware)
 @UseBefore(JwtAuthMiddleware)
 // @UseInterceptor(ResponseInterceptor())
 @JsonController("/tasks")
 export class TaskController {
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    @Logger() private log: ILogger
+  ) {}
 
   @Get()
   public findAll(
@@ -54,6 +61,7 @@ export class TaskController {
   }
 
   @Post()
+  @HttpCode(201)
   public create(@Body() task: Task, @Req() request): Promise<Task> {
     const { user } = request;
     task.userId = user.id.toString();
@@ -61,8 +69,12 @@ export class TaskController {
   }
 
   @Put("/:id")
-  public update(@Param("id") id: string, @Body() task: Task): Promise<Task> {
-    return this.taskService.update(id, task);
+  public async update(
+    @Param("id") id: string,
+    @Body() task: Task
+  ): Promise<Task> {
+    const updatedTask = await this.taskService.update(id, task);
+    return updatedTask;
   }
 
   @Delete("/:id")

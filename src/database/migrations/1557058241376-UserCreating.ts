@@ -13,6 +13,8 @@ import { Role } from "../../api/types/Role";
 import { Sequence } from "../../api/models/Sequence";
 import { logger } from "../../utils";
 import Note from "../../api/models/Note";
+import user from "../../../test/fixture/TestUser";
+import _ from "lodash";
 
 export class UserCreating1557058241376 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
@@ -27,18 +29,8 @@ export class UserCreating1557058241376 implements MigrationInterface {
     }
 
     const mongoManager = await connection.createEntityManager();
-    const user = new User();
-    user.username = "test";
-    user.email = "test@test.com";
-    user.password = "test";
-    const fullName = new FullName();
-    fullName.firstName = "Test";
-    fullName.lastName = "Suite";
-    user.fullName = fullName;
-    user.sex = Sex.FEMALE;
-    user.role = Role.ADMIN;
-    user.isVerified = true;
-    const savedUser = await mongoManager.save(user);
+
+    const savedUser = await mongoManager.save(_.cloneDeep(user));
 
     const sequence = new Sequence();
     sequence.name = "taskPosition";

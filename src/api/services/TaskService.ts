@@ -178,6 +178,6 @@ function getOptionByCategory(category: string | undefined) {
         }
       };
     default:
-      throw new BadRequestError("The category param is not valid");
+      return {};
   }
 }

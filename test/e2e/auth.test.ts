@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import { perpareServer, IBootstrapSettings } from "../utils/server";
+import { bootstrapServer, IBootstrapSettings } from "../utils/server";
 import { User } from "../../src/api/models";
 import { logger } from "../../src/utils";
 import { sgMail } from "../../src/mailer";
@@ -31,9 +31,9 @@ jest.mock("../../src/mailer", () => {
   };
 });
 
-function registerWith(_r) {
+function registerWith(request) {
   return async user => {
-    return await _r.post("/v1/auth/register").send(user);
+    return await request.post("/v1/auth/register").send(user);
   };
 }
 
@@ -43,8 +43,7 @@ describe("/v1/auth", () => {
   let register;
 
   beforeAll(async done => {
-    logger.info("beforeall");
-    settings = await perpareServer();
+    settings = await bootstrapServer();
     request = supertest(settings.app);
     register = registerWith(request);
     done();
@@ -53,12 +52,6 @@ describe("/v1/auth", () => {
   afterAll(async done => {
     await settings.shutdown();
     jest.clearAllMocks();
-    jest.clearAllTimers();
-    done();
-  });
-
-  afterEach(async done => {
-    await settings.connection.getMongoRepository(User).clear();
     done();
   });
 

@@ -11,7 +11,7 @@ export interface IBootstrapSettings {
   shutdown(): void;
 }
 
-export const perpareServer = async (options?: { migrate: boolean }) => {
+export const bootstrapServer = async (options?: { migrate: boolean }) => {
   logger.info(`process.env.NODE_ENV=${process.env.NODE_ENV}. Prepare server.`);
   const framework = await bootstrapApp();
   const app = framework.settings.getData("express_app") as Application;

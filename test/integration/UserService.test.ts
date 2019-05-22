@@ -5,8 +5,7 @@ import { Connection } from "typeorm";
 import { createDatabaseConnection, closeDatabase } from "../utils";
 import faker from "faker";
 import { Sex } from "../../src/api/types";
-import { IBootstrapSettings } from "../utils/bootstrap";
-import { perpareServer } from "../utils/server";
+import { bootstrapServer, IBootstrapSettings } from "../utils/server";
 
 describe("User service", () => {
   const username = faker.name.findName();
@@ -24,7 +23,7 @@ describe("User service", () => {
 
   let settings: IBootstrapSettings;
   beforeAll(async done => {
-    settings = await perpareServer();
+    settings = await bootstrapServer();
     done();
   });
   afterAll(async done => {
