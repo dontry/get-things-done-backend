@@ -5,8 +5,7 @@ import { closeDatabase, migrateDatabase } from "../utils";
 import faker from "faker";
 import { logger } from "../../src/utils";
 import { POS_SEQUENCE_STEP } from "../../src/constants";
-import { perpareServer } from "../utils/server";
-import { IBootstrapSettings } from "../utils/bootstrap";
+import { perpareServer, IBootstrapSettings } from "../utils/server";
 
 describe("Task service", () => {
   const userId = "adsfas1.123df";
@@ -20,8 +19,9 @@ describe("Task service", () => {
   let taskService: TaskService;
   beforeAll(async done => {
     logger.info("beforeall");
-    settings = await perpareServer();
-    await migrateDatabase(settings.connection);
+    settings = await perpareServer({
+      migrate: true
+    });
     taskService = Container.get<TaskService>(TaskService);
     done();
   });
@@ -29,9 +29,8 @@ describe("Task service", () => {
   afterAll(async done => {
     if (settings.connection) {
       await settings.connection.getMongoRepository(Task).clear();
-      closeDatabase(settings.connection);
+      settings.shutdown();
     }
-    await settings.server.close();
     done();
   });
 
@@ -52,7 +51,8 @@ describe("Task service", () => {
     task.create(title, userId, attribute, createdAt);
     const newTask = await taskService.create(task);
     const deletedTask = await taskService.delete(newTask.id);
-    expect(newTask).toEqual(deletedTask);
+    expect(newTask.title).toEqual(deletedTask.title);
+    expect(newTask.pos).toEqual(deletedTask.pos);
     done();
   });
 
@@ -78,16 +78,5 @@ describe("Task service", () => {
       );
       done();
     }
-  });
-
-  it("should fetch tasks with pagination", async done => {
-    const actual = await taskService.find(userId, {
-      limit: 15,
-      page: 0,
-      category: "inbox"
-    });
-
-    expect(actual.itemCount).toBeGreaterThan(0);
-    expect(actual.totalItems).toBeGreaterThan(0);
   });
 });
