@@ -1,22 +1,24 @@
 import supertest from "supertest";
-import { IBootstrapSettings } from "../utils/bootstrap";
-import { perpareServer } from "../utils/server";
-import { closeDatabase } from "../utils";
+import { perpareServer, IBootstrapSettings } from "../utils/server";
 import { User } from "../../src/api/models";
 import { logger } from "../../src/utils";
 import { sgMail } from "../../src/mailer";
 import createUser from "../fixture/createUser";
+import { UserService } from "../../src/api/services";
+import { Container } from "typedi";
+import _ from "lodash";
 
 jest.setTimeout(60000);
 
 let authorizationToken;
 const tokenRegex = /token=(\S+)"/;
+
 jest.mock("../../src/mailer", () => {
   return {
     sgMail: {
       send: jest.fn(mailData => {
         return new Promise(res => {
-          logger.info(mailData.html);
+          // logger.info(mailData.html);
           const result = tokenRegex.exec(mailData.html);
           if (result) {
             authorizationToken = result[1];
@@ -29,6 +31,12 @@ jest.mock("../../src/mailer", () => {
   };
 });
 
+function registerWith(_r) {
+  return async user => {
+    return await _r.post("/v1/auth/register").send(user);
+  };
+}
+
 describe("/v1/auth", () => {
   let settings: IBootstrapSettings;
   let request;
@@ -37,25 +45,20 @@ describe("/v1/auth", () => {
   beforeAll(async done => {
     logger.info("beforeall");
     settings = await perpareServer();
-    request = supertest(settings.server);
+    request = supertest(settings.app);
     register = registerWith(request);
     done();
   });
 
   afterAll(async done => {
-    if (settings.connection) {
-      await closeDatabase(settings.connection);
-    }
-    await settings.server.close();
+    await settings.shutdown();
     jest.clearAllMocks();
     jest.clearAllTimers();
     done();
   });
 
   afterEach(async done => {
-    if (settings.connection) {
-      await settings.connection.getMongoRepository(User).clear();
-    }
+    await settings.connection.getMongoRepository(User).clear();
     done();
   });
 
@@ -66,6 +69,7 @@ describe("/v1/auth", () => {
       const actual: User = response.body;
       logger.info("register user:", actual);
       expect(actual.username).toBe(mockUser.username);
+      expect(sgMail.send).toHaveBeenCalledTimes(1); // not sure why it has to be 2
       done();
     } catch (error) {
       return done(error);
@@ -90,7 +94,6 @@ describe("/v1/auth", () => {
     expect(res.body.message).toBe(
       "Login failed: The account has not been verified yet."
     );
-    expect(sgMail.send).toHaveBeenCalledTimes(2); // not sure why it has to be 2
     done();
   });
 
@@ -103,14 +106,27 @@ describe("/v1/auth", () => {
       .set("Accept", "application/json")
       // .expect("Content-type", /json/)
       .expect(200);
-
     expect(res.body.message).toBe("This account is verified.");
     done();
   });
-});
 
-function registerWith(_r) {
-  return async user => {
-    return await _r.post("/v1/auth/register").send(user);
-  };
-}
+  test("/login verfied", async done => {
+    const mockUser = createUser();
+    mockUser.isVerified = true;
+    const userService = Container.get<UserService>(UserService);
+    // the save method will change the original object;
+    await userService.register(_.cloneDeep(mockUser));
+    const res = await request
+      .post("/v1/auth/login")
+      .send({
+        username: mockUser.username,
+        password: mockUser.password
+      })
+      .set("Accept", "application/json")
+      .expect(200);
+    logger.info(res);
+    expect(res.body.data.username).toBe(mockUser.username);
+    expect(res.body.token).toBeTruthy();
+    done();
+  });
+});

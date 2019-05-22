@@ -8,7 +8,6 @@ import {
   OnUndefined,
   Put,
   UseBefore,
-  OnNull,
   Get,
   BadRequestError,
   QueryParam,
@@ -59,7 +58,7 @@ export class AuthController {
             expiresIn: "30d",
             algorithm: "RS256"
           });
-          return res({ user, token });
+          return res({ data: user, token });
         }
       )(request, response);
     });

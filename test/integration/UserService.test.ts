@@ -5,6 +5,8 @@ import { Connection } from "typeorm";
 import { createDatabaseConnection, closeDatabase } from "../utils";
 import faker from "faker";
 import { Sex } from "../../src/api/types";
+import { IBootstrapSettings } from "../utils/bootstrap";
+import { perpareServer } from "../utils/server";
 
 describe("User service", () => {
   const username = faker.name.findName();
@@ -20,13 +22,14 @@ describe("User service", () => {
   };
   let user;
 
-  let connection: Connection;
-  beforeAll(async () => {
-    connection = await createDatabaseConnection();
+  let settings: IBootstrapSettings;
+  beforeAll(async done => {
+    settings = await perpareServer();
+    done();
   });
   afterAll(async done => {
-    await connection.getMongoRepository(User).clear();
-    await closeDatabase(connection);
+    await settings.connection.getMongoRepository(User).clear();
+    await closeDatabase(settings.connection);
     done();
   });
 

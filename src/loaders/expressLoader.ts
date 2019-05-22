@@ -67,10 +67,22 @@ export const expressLoader: MicroframeworkLoader = (
       );
     }
 
-    const expressServer = expressApp.listen(port, () => {
-      logger.info(`Express is running at port ${port}`);
-    });
+    let expressServer;
+    logger.info("starts expressServer");
+    if (process.env.NODE_ENV !== "test") {
+      expressServer = expressApp.listen(port, () => {
+        logger.info(`Express is running at port ${port}`);
+      });
+      settings.setData("express_server", expressServer);
+    }
+
     settings.setData("express_app", expressApp);
-    settings.setData("express_server", expressServer);
+    settings.onShutdown(() => {
+      if (expressServer) {
+        expressServer.close(() => {
+          logger.info("close expressServer");
+        });
+      }
+    });
   }
 };

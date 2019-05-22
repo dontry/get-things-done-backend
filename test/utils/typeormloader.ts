@@ -11,6 +11,9 @@ export const typeormLoader: MicroframeworkLoader = async (
   const connection = await createDatabaseConnection(databaseOptions);
   if (settings) {
     settings.setData("connection", connection);
-    settings.onShutdown(() => connection.close());
+    settings.onShutdown(async () => {
+      connection.dropDatabase();
+      connection.close();
+    });
   }
 };
