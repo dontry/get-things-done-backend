@@ -72,7 +72,7 @@ export class UserService {
     if (errors.length > 0) {
       throw new ModelValidationError(errors);
     }
-    return this.userRepository.save(user);
+    return this.userRepository.save(validUser);
     // this.eventDispatcher.dispatch(events.user.created, newUser);
   }
 
@@ -100,11 +100,12 @@ export class UserService {
       // Preserve use id & role
       user.id = oldUser.id;
       user.role = oldUser.role;
-      const errors = await validate(user, { whitelist: true });
+      const validUser = _.cloneDeep(user);
+      const errors = await validate(validUser, { whitelist: true });
       if (errors.length > 0) {
         throw new ModelValidationError(errors);
       }
-      return this.userRepository.create(user);
+      return this.userRepository.create(validUser);
     } else {
       throw new UserNotFoundError();
     }

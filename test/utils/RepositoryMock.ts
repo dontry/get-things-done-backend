@@ -9,6 +9,10 @@ export class RepositoryMock<T> {
   public deleteMock = jest.fn();
   public getNextSequenceMock = jest.fn();
 
+  constructor() {
+    this.list = [];
+  }
+
   /**
    * find
    */
@@ -35,7 +39,15 @@ export class RepositoryMock<T> {
    */
   public save(value: T, ...args: any[]): Promise<T> {
     this.saveMock(value, args);
+    this.list.push(value);
     return Promise.resolve(value);
+  }
+
+  /**
+   * name
+   */
+  public clear() {
+    this.list = [];
   }
 
   /**

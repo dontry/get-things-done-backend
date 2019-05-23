@@ -6,22 +6,11 @@ import { createDatabaseConnection, closeDatabase } from "../utils";
 import faker from "faker";
 import { Sex } from "../../src/api/types";
 import { bootstrapServer, IBootstrapSettings } from "../utils/server";
+import createUser from "../fixture/createUser";
 
 describe("User service", () => {
-  const username = faker.name.findName();
-  const email = faker.internet.email();
-  const password = "12nzsd&dasdA";
-  const age = 39;
-  const sex = Sex.FEMALE;
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName();
-  const fullName = {
-    firstName,
-    lastName
-  };
-  let user;
-
   let settings: IBootstrapSettings;
+
   beforeAll(async done => {
     settings = await bootstrapServer();
     done();
@@ -33,8 +22,7 @@ describe("User service", () => {
   });
 
   it("should create a new user in the database", async done => {
-    user = new User();
-    user.create(username, password, email, fullName, age, sex);
+    const user: User = createUser();
     const userService = Container.get<UserService>(UserService);
     const actual = await userService.create(user);
     if (actual) {
@@ -46,17 +34,14 @@ describe("User service", () => {
   });
 
   it("should update the user in the database", async done => {
+    const user: User = createUser();
     const userService = Container.get<UserService>(UserService);
-    const createdUser = await userService.findOne({
-      username
-    });
+    const createdUser: User = await userService.create(user);
+    // because the createdUser doesn't have password
     if (createdUser) {
-      createdUser.age = 100;
-      createdUser.sex = Sex.MALE;
-      const actual = await userService.update(
-        createdUser.id.toString(),
-        createdUser
-      );
+      user.age = 100;
+      user.sex = Sex.MALE;
+      const actual = await userService.update(createdUser.id.toString(), user);
       if (actual) {
         expect(actual.age).toBe(100);
         expect(actual.sex).toBe(Sex.MALE);
