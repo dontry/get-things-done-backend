@@ -27,6 +27,7 @@ describe("Task service", () => {
       await settings.connection.getMongoRepository(Task).clear();
       settings.shutdown();
     }
+    jest.clearAllMocks();
     done();
   });
 

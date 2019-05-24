@@ -18,6 +18,7 @@ describe("User service", () => {
   afterAll(async done => {
     await settings.connection.getMongoRepository(User).clear();
     await closeDatabase(settings.connection);
+    jest.clearAllMocks();
     done();
   });
 

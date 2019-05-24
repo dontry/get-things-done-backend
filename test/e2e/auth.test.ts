@@ -55,6 +55,13 @@ describe("/v1/auth", () => {
     done();
   });
 
+  afterEach(async done => {
+    if (settings.connection) {
+      await settings.connection.getMongoRepository(User).clear();
+      done()
+    }
+  });
+
   test("/register", async done => {
     try {
       const mockUser = createUser();
@@ -62,10 +69,10 @@ describe("/v1/auth", () => {
       const actual: User = response.body;
       logger.info("register user:", actual);
       expect(actual.username).toBe(mockUser.username);
-      expect(sgMail.send).toHaveBeenCalledTimes(1); // not sure why it has to be 2
+      expect(sgMail.send).toHaveBeenCalledTimes(1);
       done();
     } catch (error) {
-      return done(error);
+      fail(error);
     }
   });
 
@@ -73,7 +80,7 @@ describe("/v1/auth", () => {
     const mockUser = createUser();
     await register(mockUser);
 
-    const res = await request
+    request
       .post("/v1/auth/login")
       .send({
         username: mockUser.username,
@@ -81,26 +88,35 @@ describe("/v1/auth", () => {
       })
       .set("Accept", "application/json")
       // .expect("Content-type", /json/)
-      .expect(401);
-
-    expect(res.body.name).toBe("Unauthorized");
-    expect(res.body.message).toBe(
-      "Login failed: The account has not been verified yet."
-    );
-    done();
+      .expect(401)
+      .end((error, res) => {
+        if (error) {
+          fail(error);
+        }
+        expect(res.body.name).toBe("Unauthorized");
+        expect(res.body.message).toBe(
+          "Login failed: The account has not been verified yet."
+        );
+        done();
+      });
   });
 
   test("/verify", async done => {
     const mockUser = createUser();
     await register(mockUser);
-    const res = await request
+    request
       .get("/v1/auth/verify")
       .query({ token: authorizationToken })
       .set("Accept", "application/json")
       // .expect("Content-type", /json/)
-      .expect(200);
-    expect(res.body.message).toBe("This account is verified.");
-    done();
+      .expect(200)
+      .end((error, res) => {
+        if (error) {
+          fail(error);
+        }
+        expect(res.body.message).toBe("This account is verified.");
+        done();
+      });
   });
 
   test("/login verfied", async done => {
@@ -117,7 +133,6 @@ describe("/v1/auth", () => {
       })
       .set("Accept", "application/json")
       .expect(200);
-    logger.info(res);
     expect(res.body.data.username).toBe(mockUser.username);
     expect(res.body.token).toBeTruthy();
     done();
