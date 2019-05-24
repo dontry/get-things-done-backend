@@ -3,7 +3,6 @@ import { User } from "../../src/api/models";
 import { Sex } from "../../src/api/types";
 import { Role } from "../../src/api/types/Role";
 
-faker.seed(2);
 export default function createUser(): User {
   const user = new User();
 
